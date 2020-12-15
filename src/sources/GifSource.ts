@@ -40,7 +40,7 @@ export class GifSource extends BaseSource {
             let yOffsetResult = i * targetHeight;
             let inputBufferOffset = i * inputFrameSize;
             let outputBufferOffset = i * outputFrameSize;
-            process.stdout.write(`Converting frame ${i + 1}/${input.pages}\r`);
+            process.stdout.write(`[GIF Source] Converting frame ${i + 1}/${input.pages}\r`);
             let frame = await sharp(
                 imgBuf.subarray(inputBufferOffset, inputBufferOffset + inputFrameSize),
                 { raw: { width: input.width, height: input.pageHeight, channels: 3 } })
@@ -49,14 +49,14 @@ export class GifSource extends BaseSource {
                 .toBuffer();
             frame.copy(outputBuf, outputBufferOffset);
         }
-        console.log(`\nDone.`);
+        console.log(`\n[GIF Source] Done.`);
 
         return outputBuf;
     }
 
     // save gif data in class variables and return frame delay
     private async parseGif(filePath: string): Promise<number> {
-        console.log(`Loading gif ${filePath}`);
+        console.log(`[GIF Source] Loading gif ${filePath}`);
 
         try {
             let time = Date.now();
@@ -83,7 +83,7 @@ export class GifSource extends BaseSource {
             // copy conversion result to local buffer
             gifResult.copy(this.gifBuf);
             
-            console.log(`Took ${Date.now() - time} ms`);
+            console.log(`[GIF Source] Took ${Date.now() - time} ms`);
             return gifMetadata.delay[0];
         }
         catch (e) {
@@ -95,7 +95,7 @@ export class GifSource extends BaseSource {
     async showGif(filePath: string) {
         let frameDelay = await this.parseGif(filePath);
         if (frameDelay > 0) {
-            console.log(`Drawing gif with ${1000 / frameDelay} FPS and ${this.gifFramesNum} frames`);
+            console.log(`[GIF Source] Drawing gif with ${1000 / frameDelay} FPS and ${this.gifFramesNum} frames`);
             this.gifFrameIdx = 0;
             this.showGifTick();
             this.gifInterval = setInterval(() => this.showGifTick(), frameDelay);

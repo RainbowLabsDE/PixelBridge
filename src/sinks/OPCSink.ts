@@ -1,6 +1,5 @@
 import { BaseSink } from "./BaseSink"
 
-import "dgram";
 import * as dgram from "dgram";
 
 export class OPCSink extends BaseSink {

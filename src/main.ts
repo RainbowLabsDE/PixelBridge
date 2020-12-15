@@ -1,6 +1,7 @@
 import * as sharp from "sharp"
 import { ModLedConverter } from "./converters/ModLedConverter";
 import { OPCSink } from "./sinks/OPCSink";
+import { ArtnetSource } from "./sources/ArtnetSource";
 import {DummySource} from "./sources/DummySource";
 import { GifSource } from "./sources/GifSource";
 
@@ -22,6 +23,7 @@ let modLedConverter = new ModLedConverter(panelsX, panelsY, 16, 16, opcSinks);
 
 
 let file = "tthl.gif"
+// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catNail.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/bongo1.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catPC.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/groot.gif"
@@ -30,7 +32,10 @@ let file = "tthl.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/rick.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/simpsons.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/Cyber2.png"
-let gifSource = new GifSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
-gifSource.showGif(file);
+// let gifSource = new GifSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
+// gifSource.showGif(file);
 
-console.log("started");
+let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
+
+
+console.log("[PixelBridge] Started");
