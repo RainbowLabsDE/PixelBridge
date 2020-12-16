@@ -1,10 +1,10 @@
-import * as sharp from "sharp"
 import { ModLedConverter } from "./converters/ModLedConverter";
 import { OPCSink } from "./sinks/OPCSink";
 import { ArtnetSource } from "./sources/ArtnetSource";
-import {DummySource} from "./sources/DummySource";
+import { DummySource } from "./sources/DummySource";
 import { GifSource } from "./sources/GifSource";
 
+import { config } from './config/config';
 
 let panelsX = 6;
 let panelsY = 4;
@@ -13,9 +13,9 @@ let frameHeight = panelsY * 16;
 
 let opcSinks: OPCSink[] = [];
 
-for(let i = 0; i < panelsX * panelsY; i++) {
+for (let i = 0; i < panelsX * panelsY; i++) {
     // opcSinks.push(new OPCSink(16, 16, '192.168.13.63', 7890+i));
-    opcSinks.push(new OPCSink(16, 16, '127.0.0.1', 7890+i));
+    opcSinks.push(new OPCSink(16, 16, '127.0.0.1', 7890 + i));
 }
 
 let modLedConverter = new ModLedConverter(panelsX, panelsY, 16, 16, opcSinks);
@@ -37,5 +37,5 @@ let file = "tthl.gif"
 
 let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
 
-
 console.log("[PixelBridge] Started");
+console.log(config.test);
