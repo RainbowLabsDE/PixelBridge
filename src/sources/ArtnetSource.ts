@@ -54,7 +54,7 @@ export class ArtnetSource extends BaseSource {
 
     private async handleArtnetPacket(pkg: ArtnetPacket, fromIp: string) {
         if (pkg) {
-            // currently we expect Art-Net packets to start at universe 1 and be 510 channels in length
+            // currently Art-Net packets are expected to start at universe 1 and be 510 channels in length
             let offset = (pkg.universe - 1) * 510;
             if(offset < 0) {
                 offset = 0;
