@@ -5,6 +5,7 @@ import { DummySource } from "./sources/DummySource";
 import { GifSource } from "./sources/GifSource";
 
 import { config } from './config/config';
+import { WebServer } from "./webinterface/server";
 
 let panelsX = 6;
 let panelsY = 4;
@@ -37,5 +38,7 @@ let file = "tthl.gif"
 
 let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
 
+let server = new WebServer;
+
 console.log("[PixelBridge] Started");
-console.log(config.test);
+// console.log(config.test);

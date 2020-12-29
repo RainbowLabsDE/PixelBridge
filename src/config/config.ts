@@ -1,10 +1,28 @@
 export interface ConfigStructure {
     save?: Function;
-    test: string;
+    web: {
+        port: number;
+    }
+    modLED: {
+        size: {
+            x: number;
+            y: number;
+        },
+        modules: {host: string, port: number}[];
+    }
 }
 
 const configDefaults: ConfigStructure = {
-    test: "foobar"
+    web: {
+        port: 8080
+    },
+    modLED: {
+        size: {
+            x: 0,
+            y: 0
+        },
+        modules: []
+    }
 }
 
 
