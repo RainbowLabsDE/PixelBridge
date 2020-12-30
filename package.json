@@ -16,8 +16,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc && copyfiles -u 3 src/webinterface/static/* dist/webinterface/static/",
-    "start": "npm run build && node dist/main.js"
+    "copyFiles": "copyfiles -u 3 src/webinterface/static/* dist/webinterface/static/",
+    "build": "tsc && npm run copyFiles",
+    "start": "npm run build && node dist/main.js",
+    "devWebsite": "nodemon -e html,css,js,png,jpg --watch src --exec npm run copyFiles",
+    "dev": "nodemon --watch src -e ts --exec npm start"
   },
   "author": "",
   "license": "MIT"
