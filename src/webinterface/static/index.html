@@ -14,9 +14,10 @@
         <div>
             <span>Module Configuration</span>
             <label for="modled-size-x">X:</label>
-            <input type="number" id="modled-size-x" step="1" min="1" max="1024" data-bind="value: modLED.size.x">
+            <input type="number" id="modled-size-x" step="1" min="1" max="1024" data-bind="value: selectedSizeX">
             <label for="modled-size-y">Y:</label>
-            <input type="number" id="modled-size-y" step="1" min="1" max="1024" data-bind="value: modLED.size.y">
+            <input type="number" id="modled-size-y" step="1" min="1" max="1024" data-bind="value: selectedSizeY">
+            <button data-bind="click: onSizeChangedClick">Change Size</button>
         </div>
 
         <div>
@@ -26,17 +27,16 @@
             <label for="manual">Manual</label>
         </div>
 
-        <!-- <span data-bind="text: modLED.moduleNum"></span> -->
-
         <div>
             <div data-bind="visible: modLED.configType() == 'simple'">
                 <h4>Common Module Settings</h4>
                 <label>Base IP Address:</label>
-                <!-- <input type="text" pattern="(([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\.){3}" data-bind="value: modLED.subnetPrefix"> -->
-                <!-- ko foreach: modLED.subnetPrefix -->
-                <input type="number" class="ip-octet" min="0" max="255" data-bind="value: $data">
+                <input type="number" class="ip-octet" min="0" max="255" data-bind="value: modLED.ipOctet1">
                 <span>.</span>
-                <!-- /ko -->
+                <input type="number" class="ip-octet" min="0" max="255" data-bind="value: modLED.ipOctet2">
+                <span>.</span>
+                <input type="number" class="ip-octet" min="0" max="255" data-bind="value: modLED.ipOctet3">
+                <span>.</span>
                 <span>XXX</span>
                 <br>
                 <label for="same-port">Port:</label>
@@ -52,14 +52,14 @@
                         <!-- /ko -->
                     </tr>
                 </thead>
-                <tbody data-bind="foreach: {data: new Array(Number(modLED.size.y())), as: 'y', noChildContext: true }">
+                <tbody data-bind="foreach: {data: modLED.modules, as: 'row', noChildContext: true }">
                     <tr>
-                        <th data-bind="text: yIndex() + 1"></th>
-                        <!-- ko foreach: {data: new Array(Number(modLED.size.x())), as: 'x', noChildContext: true } -->
-                        <!-- ko let: idx = yIndex() * modLED.size.x() + xIndex() -->
+                        <th data-bind="text: rowIndex() + 1"></th>
+                        <!-- ko foreach: {data: row, as: 'module', noChildContext: true } -->
+                        <!-- ko let: idx = rowIndex() * modLED.size.x() + moduleIndex() -->
                         <td>
-                            <input type="text" data-bind="visible: modLED.configType() == 'manual', value: modLED.modules()[yIndex() * modLED.size.x() + xIndex()], attr: {placeholder: idx, id: idx, name: idx}">
-                            <input type="number" class="ip-octet" min="0" max="255" data-bind="visible: modLED.configType() == 'simple', value: modLED.simpleHosts()[yIndex() * modLED.size.x() + xIndex()], attr: {placeholder: idx}">
+                            <input type="text" data-bind="visible: modLED.configType() == 'manual', value: module.manualHost, attr: {placeholder: idx}">
+                            <input type="number" class="ip-octet" min="0" max="255" data-bind="visible: modLED.configType() == 'simple', value: module.lastOctet, attr: {placeholder: idx}">
                         </td>
                         <!-- /ko -->
                         <!-- /ko -->
