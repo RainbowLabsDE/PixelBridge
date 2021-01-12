@@ -39,7 +39,7 @@ class AppViewModel {
     }
 
     onSizeChangedClick() {
-        if (confirm('are you sure?')) {
+        if (confirm('Are you sure? This will DELETE previously entered data in removed fields!')) {
             this.modLED.size.x(this.selectedSizeX());
             this.modLED.size.y(this.selectedSizeY());
             this.setSize();
@@ -49,17 +49,33 @@ class AppViewModel {
     setSize() {
         let rows = [];
         for (let y = 0; y < this.modLED.size.y(); y++) {
-            let columns = [];
+            let column = [];
             for (let x = 0; x < this.modLED.size.x(); x++) {
-                columns.push(new ModuleModel(this));
+                // keep data from before if possible
+                if(this.modLED.modules()[y] && this.modLED.modules()[y][x]) {
+                    column.push(this.modLED.modules()[y][x]);
+                }
+                else {
+                    column.push(new ModuleModel(this));
+                }
             }
-            rows.push(columns);
+            rows.push(column);
         }
 
         this.modLED.modules(rows);
     }
 
     save() {
+        // generate manual config from simple config on save
+        if (this.modLED.configType() == 'simple') {
+            this.modLED.modules().forEach(row => {
+                row.forEach(module => {
+                    module.manualHost(module.host());
+                })
+            });
+        }
+
+        // actual save function
         console.log(this.modLED.modules().map(row => row.map(x => x.host())));
     }
 }

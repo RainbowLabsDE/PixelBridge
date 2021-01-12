@@ -22,8 +22,9 @@ export class ModLedConverter {
                     let panelOffset = y * this.panelWidth;
 
                     // console.log({panelY: panelY, panelX: panelX, y: y, frameXOffset: frameXOffset, frameOffset: frameOffset, panelOffset: panelOffset});
-
-                    frame.buffer.copy(this.sinkFrames[panelNum].buffer, panelOffset * 3, frameOffset * 3, (frameOffset + this.panelWidth) * 3);
+                    if(this.sinkFrames[panelNum]) {
+                        frame.buffer.copy(this.sinkFrames[panelNum].buffer, panelOffset * 3, frameOffset * 3, (frameOffset + this.panelWidth) * 3);
+                    }
                 }
             }
         }
