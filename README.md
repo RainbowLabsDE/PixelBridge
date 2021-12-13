@@ -6,4 +6,4 @@ It's targeted to do the image data conversion for the [modLED project](https://g
 
 
 ## How to run
-Run with `npm start` (don't forgetto run `npm i` the first time).
+Run with `npm start -- -x 16 -y 16 --source FreezeFrame` (don't forgetto run `npm i` the first time).

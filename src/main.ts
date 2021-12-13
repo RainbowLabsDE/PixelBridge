@@ -6,25 +6,28 @@ import { GifSource } from "./sources/GifSource";
 
 import { config } from './config/config';
 import { WebServer } from "./webinterface/server";
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
+import {FreezeFrameSource} from "./sources/FreezeFrameSource";
 
 const program = new Command();
 
 // npm start -- -x 16 -y 16
 
 program
-    .option('-sp, --settingsPage', 'Launches a settings webpage')
     .requiredOption('-x, --panelWidth <panelWidth>', 'Width of a single panel')
     .requiredOption('-y, --panelHeight <panelHeight>', 'Height of a single panel')
-    .option('-pxc, --panelWidthCount <panelWidthCount>', 'Number of horizontal panels', '1')
-    .option('-pyc, --panelHeightCount <panelHeightCount>', 'Number of vertical panels', '1')
+    .addOption(new Option('-s, --source <source>', 'Input source').choices(["Gif", "Artnet", "FreezeFrame", "Dummy"]))
+    .option('-sf, --sourceFile <sourceFile>', 'Path to the file for the source')
+    .option('-pnx, --panelNumX <panelNumX>', 'Number of horizontal panels', '1')
+    .option('-pny, --panelNumY <panelNumY>', 'Number of vertical panels', '1')
+    .option('-sp, --settingsPage', 'Launches a settings webpage')
     .parse();
 
 const options = program.opts();
 
-let totalPanelCount = options.panelWidthCount * options.panelHeightCount;
-let frameWidth = options.panelWidthCount * options.panelWidth;
-let frameHeight = options.panelHeightCount * options.panelHeight;
+let totalPanelCount = options.panelNumX * options.panelNumY;
+let frameWidth = options.panelNumX * options.panelWidth;
+let frameHeight = options.panelNumY * options.panelHeight;
 
 let opcSinks: OPCSink[] = [];
 
@@ -32,11 +35,11 @@ for (let i = 0; i < totalPanelCount; i++) {
     opcSinks.push(new OPCSink(options.panelWidth, options.panelHeight, '127.0.0.1', 7890 + i));
 }
 
-let modLedConverter = new ModLedConverter(options.panelWidthCount, options.panelHeightCount, options.panelWidth, options.panelHeight, opcSinks);
-// let dummySource = new DummySource(frameWidth, frameHeight, (frame) => {modLedConverter.sendFrame(frame)});
+let modLedConverter = new ModLedConverter(options.panelNumX, options.panelNumY, options.panelWidth, options.panelHeight, opcSinks);
+let dummySource = new FreezeFrameSource(frameWidth, frameHeight, (frame) => {modLedConverter.sendFrame(frame)});
 
 
-let file = "rgb.gif"
+//let file = "rgb.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catNail.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/bongo1.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catPC.gif"
@@ -46,8 +49,8 @@ let file = "rgb.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/rick.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/simpsons.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/Cyber2.png"
-let gifSource = new GifSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
-gifSource.showGif(file);
+//let gifSource = new GifSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
+//gifSource.showGif(file);
 
 //let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
 
