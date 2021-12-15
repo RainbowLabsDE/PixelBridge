@@ -1,23 +1,21 @@
 import * as Rete from "rete";
 import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
-import { NumControl } from "../controls/numControl";
-import { FrameSocket, NumSocket } from "../sockets/sockets";
+import { TextControl } from "../controls/textControl";
+import { FrameSocket, TextSocket } from "../sockets/sockets";
 
-export class ArtnetComponent extends Rete.Component {
+export class GifComponent extends Rete.Component {
     constructor() {
-        super("ArtNet");
+        super("GIF");
     }
 
     async builder(node: Rete.Node) {
-        const in1 = new Rete.Input('port', "Port", NumSocket);
+        const in1 = new Rete.Input('path', "Path", TextSocket);
         const out1 = new Rete.Output('frame', "Frame", FrameSocket);
 
-        in1.addControl(new NumControl(this.editor, 'port'));
-        
+        in1.addControl(new TextControl(this.editor, 'path'));
+
         node.addInput(in1)
             .addOutput(out1);
-
-        in1.control.putData('port', 6454);
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

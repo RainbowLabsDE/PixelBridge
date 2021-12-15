@@ -9,9 +9,10 @@ import HistoryPlugin from 'rete-history-plugin';
 import { NumComponent } from "./components/numComponent";
 import { AddComponent } from "./components/addComponent";
 import { ArtnetComponent } from "./components/artnetComponent";
+import { GifComponent } from "./components/gifComponent";
 
 export default async function (container: HTMLElement) {
-  const components: Component[] = [new NumComponent(), new AddComponent(), new ArtnetComponent()];
+  const components: Component[] = [new NumComponent(), new AddComponent(), new ArtnetComponent(), new GifComponent()];
 
   const editor = new Rete.NodeEditor("pixelbridge@1.0.0", container);
   editor.use(ConnectionPlugin);

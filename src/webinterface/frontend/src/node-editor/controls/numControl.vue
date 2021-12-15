@@ -1,5 +1,5 @@
 <template>
-<input type="number" :readonly="readonly" :value="value" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>
+<input type="number" :readonly="readonly" :value="value" :placeholder="ikey" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>
 </template>
 
 <script>

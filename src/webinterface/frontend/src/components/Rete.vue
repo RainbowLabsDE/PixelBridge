@@ -43,4 +43,8 @@ select, input {
 .socket.number {
     background: #73A8DC !important;
 }
+
+.socket.text {
+    background: lightgrey !important;
+}
 </style>
