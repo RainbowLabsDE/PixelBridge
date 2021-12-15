@@ -2,7 +2,6 @@ import Rete, { Component } from "rete";
 import VueRenderPlugin from "rete-vue-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import AreaPlugin from "rete-area-plugin";
-// @ts-ignore
 import ContextMenuPlugin from "rete-context-menu-plugin";
 // import MinimapPlugin from "rete-minimap-plugin";
 // import CodePlugin from 'rete-code-plugin';

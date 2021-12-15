@@ -1,19 +1,18 @@
 <template>
-    <div id="app">
-      <Rete/>
-    </div>
+  <div id="app">
+    <Rete/>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-  import Rete from './components/Rete.vue';
-
-export default defineComponent({
-  name: 'App',
+import { Component, Vue } from 'vue-property-decorator';
+import Rete from './components/Rete.vue'
+@Component({
   components: {
     Rete
-  }
-});
+  },
+})
+export default class App extends Vue {}
 </script>
 
 <style>
