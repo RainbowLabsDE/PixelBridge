@@ -2,7 +2,11 @@ import Rete, { Component } from "rete";
 import VueRenderPlugin from "rete-vue-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import AreaPlugin from "rete-area-plugin";
+// @ts-ignore
 import ContextMenuPlugin from "rete-context-menu-plugin";
+// import MinimapPlugin from "rete-minimap-plugin";
+// import CodePlugin from 'rete-code-plugin';
+import HistoryPlugin from 'rete-history-plugin';
 import { NumComponent } from "./components/numComponent";
 import { AddComponent } from "./components/addComponent";
 
@@ -14,13 +18,11 @@ export default async function (container) {
   editor.use(VueRenderPlugin);
   editor.use(ContextMenuPlugin);
   editor.use(AreaPlugin);
+  // editor.use(MinimapPlugin);
+  editor.use(HistoryPlugin, { keyboard: true });
 
   const engine = new Rete.Engine("demo@0.1.0");
 
-  // components.map((c) => {
-  //   editor.register(c);
-  //   engine.register(c);
-  // });
   components.forEach(c => {
     editor.register(c);
     engine.register(c);
