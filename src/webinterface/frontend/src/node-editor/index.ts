@@ -3,24 +3,25 @@ import VueRenderPlugin from "rete-vue-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from "rete-context-menu-plugin";
-// import MinimapPlugin from "rete-minimap-plugin";
+import MinimapPlugin from "rete-minimap-plugin";
 // import CodePlugin from 'rete-code-plugin';
 import HistoryPlugin from 'rete-history-plugin';
 import { NumComponent } from "./components/numComponent";
 import { AddComponent } from "./components/addComponent";
+import { ArtnetComponent } from "./components/artnetComponent";
 
-export default async function (container) {
-  const components: Component[] = [new NumComponent(), new AddComponent()];
+export default async function (container: HTMLElement) {
+  const components: Component[] = [new NumComponent(), new AddComponent(), new ArtnetComponent()];
 
-  const editor = new Rete.NodeEditor("demo@0.1.0", container);
+  const editor = new Rete.NodeEditor("pixelbridge@1.0.0", container);
   editor.use(ConnectionPlugin);
   editor.use(VueRenderPlugin);
   editor.use(ContextMenuPlugin);
   editor.use(AreaPlugin);
-  // editor.use(MinimapPlugin);
+  editor.use(MinimapPlugin);
   editor.use(HistoryPlugin, { keyboard: true });
 
-  const engine = new Rete.Engine("demo@0.1.0");
+  const engine = new Rete.Engine("pixelbridge@1.0.0");
 
   components.forEach(c => {
     editor.register(c);

@@ -1,5 +1,6 @@
 import Rete from "rete";
 
 const NumSocket = new Rete.Socket('Number');
-export { NumSocket };
+const FrameSocket = new Rete.Socket('Frame');
+export { NumSocket, FrameSocket };
 

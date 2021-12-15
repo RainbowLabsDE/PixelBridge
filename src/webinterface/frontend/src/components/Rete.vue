@@ -35,4 +35,12 @@ select, input {
   font-size: 110%;
   width: 170px;
 }
+
+.socket.frame {
+    background: #BAE1A8 !important;
+}
+
+.socket.number {
+    background: #73A8DC !important;
+}
 </style>
