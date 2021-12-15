@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "copyFiles": "copyfiles -u 3 src/webinterface/static/* dist/webinterface/static/",
+    "copyFiles": "copyfiles -u 3 src/webinterface/frontend/dist/** dist/webinterface/frontend",
     "build": "tsc && npm run copyFiles",
     "start": "npm run build && node dist/main.js",
     "devWebsite": "nodemon -e html,css,js,png,jpg --watch src --exec npm run copyFiles",

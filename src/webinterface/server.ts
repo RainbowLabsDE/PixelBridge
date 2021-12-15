@@ -12,7 +12,7 @@ export class WebServer {
     private initServer() {
         this.app = express();
 
-        this.app.use(express.static(__dirname + '/static'));
+        this.app.use(express.static(__dirname + '/frontend/dist'));
 
         this.app.route('/api/modLED/modules')
             .get(this.getModLedModules);
