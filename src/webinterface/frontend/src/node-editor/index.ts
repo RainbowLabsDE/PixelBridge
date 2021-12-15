@@ -6,13 +6,21 @@ import ContextMenuPlugin from "rete-context-menu-plugin";
 import MinimapPlugin from "rete-minimap-plugin";
 // import CodePlugin from 'rete-code-plugin';
 import HistoryPlugin from 'rete-history-plugin';
+import CommentPlugin from 'rete-comment-plugin';
 import { NumComponent } from "./components/numComponent";
 import { AddComponent } from "./components/addComponent";
 import { ArtnetComponent } from "./components/artnetComponent";
 import { GifComponent } from "./components/gifComponent";
+import { MultiplexerComponent } from "./components/multiplexerComponent";
 
 export default async function (container: HTMLElement) {
-  const components: Component[] = [new NumComponent(), new AddComponent(), new ArtnetComponent(), new GifComponent()];
+  const components: Component[] = [
+    new NumComponent(), 
+    new AddComponent(), 
+    new ArtnetComponent(), 
+    new GifComponent(),
+    new MultiplexerComponent()
+  ];
 
   const editor = new Rete.NodeEditor("pixelbridge@1.0.0", container);
   editor.use(ConnectionPlugin);
@@ -21,6 +29,7 @@ export default async function (container: HTMLElement) {
   editor.use(AreaPlugin);
   editor.use(MinimapPlugin);
   editor.use(HistoryPlugin, { keyboard: true });
+  editor.use(CommentPlugin, { margin: 20 });
 
   const engine = new Rete.Engine("pixelbridge@1.0.0");
 
