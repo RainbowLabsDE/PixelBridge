@@ -21,4 +21,7 @@ FORMAT_CONS = '%(asctime)s %(name)-12s %(levelname)8s\t%(message)s'
 logging.basicConfig(level=logging.DEBUG, format=FORMAT_CONS)
 
 for data in udp_server():
-    log.debug("%r" % (data,))
+    formatedData = ' '.join('{:02X}'.format(x) for x in data)
+
+
+    log.debug(formatedData)

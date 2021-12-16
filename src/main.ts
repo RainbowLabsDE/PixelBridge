@@ -8,6 +8,7 @@ import { config } from './config/config';
 import { WebServer } from "./webinterface/server";
 import { Command, Option } from 'commander';
 import {FreezeFrameSource} from "./sources/FreezeFrameSource";
+import {BaseSink} from "./sinks/BaseSink";
 
 const program = new Command();
 
@@ -29,14 +30,14 @@ let totalPanelCount = options.panelNumX * options.panelNumY;
 let frameWidth = options.panelNumX * options.panelWidth;
 let frameHeight = options.panelNumY * options.panelHeight;
 
-let opcSinks: OPCSink[] = [];
+let opcSinks: BaseSink[] = [];
 
 for (let i = 0; i < totalPanelCount; i++) {
     opcSinks.push(new OPCSink(options.panelWidth, options.panelHeight, '127.0.0.1', 7890 + i));
 }
 
 let modLedConverter = new ModLedConverter(options.panelNumX, options.panelNumY, options.panelWidth, options.panelHeight, opcSinks);
-let dummySource = new FreezeFrameSource(frameWidth, frameHeight, (frame) => {modLedConverter.sendFrame(frame)});
+//let dummySource = new FreezeFrameSource(frameWidth, frameHeight, (frame) => {modLedConverter.sendFrame(frame)});
 
 
 //let file = "rgb.gif"
@@ -52,8 +53,7 @@ let dummySource = new FreezeFrameSource(frameWidth, frameHeight, (frame) => {mod
 //let gifSource = new GifSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
 //gifSource.showGif(file);
 
-//let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
-
+let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
 let server = new WebServer;
 
 console.log("[PixelBridge] Started");
