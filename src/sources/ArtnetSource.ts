@@ -74,7 +74,7 @@ export class ArtnetSource extends BaseSource {
     }
 
     open() {
-        this.server = dgram.createSocket('udp4');
+        this.server = dgram.createSocket({type: 'udp4', reuseAddr: true});
         this.server.bind(artnetPort);
         this.server.on('listening', () => {
             let addr = this.server.address();
