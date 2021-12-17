@@ -3,4 +3,5 @@ export abstract class BaseSink {
     }
 
     abstract sendFrame(frame: Frame): Promise<void>;
+    abstract setBrightness(brightness: number);
 }

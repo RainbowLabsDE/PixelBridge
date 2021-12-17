@@ -17,11 +17,12 @@ const program = new Command();
 program
     .requiredOption('-x, --panelWidth <panelWidth>', 'Width of a single panel')
     .requiredOption('-y, --panelHeight <panelHeight>', 'Height of a single panel')
-    .addOption(new Option('-s, --source <source>', 'Input source').choices(["Gif", "Artnet", "FreezeFrame", "Dummy"]))
-    .option('-sf, --sourceFile <sourceFile>', 'Path to the file for the source')
+    //.addOption(new Option('-s, --source <source>', 'Input source').choices(["Gif", "Artnet", "FreezeFrame", "Dummy"]))
+    //.option('-sf, --sourceFile <sourceFile>', 'Path to the file for the source')
+    .option('-br, --brightness <brightness>', 'Brightness from 0 to 255', '255')
     .option('-pnx, --panelNumX <panelNumX>', 'Number of horizontal panels', '1')
     .option('-pny, --panelNumY <panelNumY>', 'Number of vertical panels', '1')
-    .option('-sp, --settingsPage', 'Launches a settings webpage')
+    //.option('-sp, --settingsPage', 'Launches a settings webpage')
     .parse();
 
 const options = program.opts();
@@ -36,25 +37,14 @@ for (let i = 0; i < totalPanelCount; i++) {
     opcSinks.push(new OPCSink(options.panelWidth, options.panelHeight, '127.0.0.1', 7890 + i));
 }
 
+opcSinks.forEach(sink => sink.setBrightness(255));
 let modLedConverter = new ModLedConverter(options.panelNumX, options.panelNumY, options.panelWidth, options.panelHeight, opcSinks);
-//let dummySource = new FreezeFrameSource(frameWidth, frameHeight, (frame) => {modLedConverter.sendFrame(frame)});
 
 
-//let file = "rgb.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catNail.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/bongo1.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catPC.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/groot.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/lynx2.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/stickFight.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/rick.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/simpsons.gif"
-// let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/Cyber2.png"
-//let gifSource = new GifSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
-//gifSource.showGif(file);
 
-let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
+let dummySource = new FreezeFrameSource(frameWidth, frameHeight, (frame) => {modLedConverter.sendFrame(frame)});
+//let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
+
+
 let server = new WebServer;
 
-console.log("[PixelBridge] Started");
-// console.log(config.test);
