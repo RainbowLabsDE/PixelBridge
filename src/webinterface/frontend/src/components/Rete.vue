@@ -47,4 +47,8 @@ select, input {
 .socket.text {
     background: lightgrey !important;
 }
+
+.socket.resolution {
+    background: lightcoral !important;
+}
 </style>
