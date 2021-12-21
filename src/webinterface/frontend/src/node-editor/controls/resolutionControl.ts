@@ -9,8 +9,8 @@ class Resolution {
 interface ResolutionControlProps {
   emitter: NodeEditor,
   ikey: string,
-  readonly: boolean,
   title: string
+  readonly: boolean,
 }
 
 export class ResolutionControl extends Rete.Control {
@@ -19,10 +19,10 @@ export class ResolutionControl extends Rete.Control {
   vueContext: any;
   value: Resolution;
 
-  constructor(emitter: NodeEditor | null, key: string, readonly = undefined, title: string = key) {
+  constructor(emitter: NodeEditor | null, key: string, title: string = key, readonly = undefined) {
     super(key);
     this.component = VueResolutionControl;
-    this.props = { emitter, ikey: key, readonly, title };
+    this.props = { emitter, ikey: key, title, readonly};
   }
 
   setValue(val) {

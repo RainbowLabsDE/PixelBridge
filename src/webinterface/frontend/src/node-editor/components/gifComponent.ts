@@ -14,7 +14,7 @@ export class GifComponent extends Rete.Component {
         const in1 = new Rete.Input('path', "Path", TextSocket);
         const out1 = new Rete.Output('frame', "Frame", FrameSocket);
 
-        in0.addControl(new ResolutionControl(this.editor, 'resolution', false, in0.name));
+        in0.addControl(new ResolutionControl(this.editor, 'resolution', in0.name));
         in1.addControl(new TextControl(this.editor, 'path'));
 
         node.addInput(in0)

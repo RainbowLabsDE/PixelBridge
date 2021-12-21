@@ -14,7 +14,7 @@ export class ArtnetComponent extends Rete.Component {
         const in1 = new Rete.Input('port', "Port", NumSocket);
         const out1 = new Rete.Output('frame', "Frame", FrameSocket);
 
-        in0.addControl(new ResolutionControl(this.editor, 'resolution', false, in0.name));
+        in0.addControl(new ResolutionControl(this.editor, 'resolution', in0.name));
         in1.addControl(new NumControl(this.editor, 'port'));
         
         node.addInput(in0)

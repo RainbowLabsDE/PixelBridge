@@ -38,12 +38,15 @@ export default {
   },
   mounted() {
     this.value = this.getData(this.ikey);
+    if (this.value == undefined) {
+      this.value = {}
+    }
   }
 }
 </script>
 
 <style>
-input {
+.resolution-control input {
   width: 60px !important;
   margin-left: 5px;
 }
