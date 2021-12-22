@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  props: ["readonly", "emitter", "ikey", "getData", "putData"],
+  props: ["readonly", "emitter", "ikey", "onChange", "getData", "putData"],
 
   data() {
     return {
@@ -18,9 +18,11 @@ export default {
       this.update();
     },
     update() {
-      if (this.ikey)
+      if (this.ikey) {
         this.putData(this.ikey, this.value)
+      }
       this.emitter.trigger('process');
+      this.onChange(this.value);
     }
   },
   mounted() {

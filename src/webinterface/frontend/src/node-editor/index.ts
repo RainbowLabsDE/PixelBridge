@@ -13,6 +13,7 @@ import { ArtnetComponent } from "./components/artnetComponent";
 import { GifComponent } from "./components/gifComponent";
 import { MultiplexerComponent } from "./components/multiplexerComponent";
 import { ResolutionComponent } from "./components/resolutionComponent";
+import { OPCMultiOutputComponent } from "./components/opcMultiOutputComponent";
 
 export default async function (container: HTMLElement) {
   const components: Component[] = [
@@ -21,7 +22,8 @@ export default async function (container: HTMLElement) {
     new ArtnetComponent(), 
     new GifComponent(),
     new MultiplexerComponent(),
-    new ResolutionComponent()
+    new ResolutionComponent(),
+    new OPCMultiOutputComponent()
   ];
 
   const editor = new Rete.NodeEditor("pixelbridge@1.0.0", container);
