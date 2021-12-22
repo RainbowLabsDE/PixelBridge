@@ -7,7 +7,7 @@ export class NumComponent extends Rete.Component {
     constructor(){ super("Number"); }
 
     async builder(node: Node) {
-        const out1 = new Rete.Output('num', "Number", NumSocket);
+        const out1 = new Rete.Output('numOut', "Number", NumSocket);
         node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
     }
 

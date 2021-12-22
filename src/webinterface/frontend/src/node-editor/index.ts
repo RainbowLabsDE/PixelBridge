@@ -54,8 +54,8 @@ export default async function (container: HTMLElement) {
   editor.addNode(n2);
   editor.addNode(add);
 
-  editor.connect(n1.outputs.get("num"), add.inputs.get("num"));
-  editor.connect(n2.outputs.get("num"), add.inputs.get("num2"));
+  editor.connect(n1.outputs.get("numOut"), add.inputs.get("num"));
+  editor.connect(n2.outputs.get("numOut"), add.inputs.get("num2"));
 
   editor.on(["process", "nodecreated", "noderemoved", "connectioncreated", "connectionremoved"],
     async () => {
