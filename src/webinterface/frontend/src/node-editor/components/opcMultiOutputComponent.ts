@@ -13,32 +13,30 @@ export class OPCMultiOutputComponent extends Rete.Component {
         
         const onChange = (i: number) => {
             console.log(i);
+            let numAddressInputs = 0;
             node.controls.forEach((control, _) => {
                 if (control.key.includes('address')) {
-                    node.removeControl(control);
+                    numAddressInputs++;
+                    const addrId = control.key.match(/address(\d+)/)[1];
+                    if (Number(addrId) >= i) {
+                        node.removeControl(control);
+                    }
                 }
             });
 
-            for (let n = 0; n < i; n++) {
-                // node.addInput(new Rete.)
+            for (let n = numAddressInputs; n < i; n++) {
                 node.addControl(new TextControl(this.editor, 'address' + n));
             }
             console.log(node);
             node.update();
         }
         
-        // const in0 = new Rete.Input('outRes', "Output Resolution", ResolutionSocket);
-        // const in1 = new Rete.Input('port', "Port", NumSocket);
         const frameIn = new Rete.Input('frame', "Frame[]", FrameArraySocket);
-
-        // in0.addControl(new ResolutionControl(this.editor, 'resolution', in0.name));
-        // in1.addControl(new NumControl(this.editor, 'port'));
         
         node.addInput(frameIn);
         node.addControl(new NumControl(this.editor, 'count', false, onChange));
-        console.log(node);
 
-        onChange(node.getConnections.length);
+        onChange(0);
 
     }
 
