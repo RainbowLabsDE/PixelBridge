@@ -2,7 +2,7 @@ import * as Rete from "rete";
 import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
 import { NumControl } from "../controls/numControl";
 import { TextControl } from "../controls/textControl";
-import { FrameArraySocket } from "../sockets/sockets";
+import { RawPixelArrSocket } from "../sockets/sockets";
 
 export class OPCMultiOutputComponent extends Rete.Component {
     constructor() {
@@ -12,7 +12,6 @@ export class OPCMultiOutputComponent extends Rete.Component {
     async builder(node: Rete.Node) {
         
         const onChange = (i: number) => {
-            console.log(i);
             let numAddressInputs = 0;
             node.controls.forEach((control, _) => {
                 if (control.key.includes('address')) {
@@ -27,13 +26,12 @@ export class OPCMultiOutputComponent extends Rete.Component {
             for (let n = numAddressInputs; n < i; n++) {
                 node.addControl(new TextControl(this.editor, 'address' + n));
             }
-            console.log(node);
             node.update();
         }
         
-        const frameIn = new Rete.Input('frame', "Frame[]", FrameArraySocket);
+        const pixelIn = new Rete.Input('rawPixIn', "RawPixels[]", RawPixelArrSocket);
         
-        node.addInput(frameIn);
+        node.addInput(pixelIn);
         node.addControl(new NumControl(this.editor, 'count', false, onChange));
 
         onChange(0);

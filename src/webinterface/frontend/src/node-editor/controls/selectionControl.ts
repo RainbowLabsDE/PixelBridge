@@ -9,7 +9,7 @@ interface SelectionControlProps {
     readonly: boolean,
 }
 
-interface SelectionOption {
+export interface SelectionOption {
     value: string,
     name: string
 }

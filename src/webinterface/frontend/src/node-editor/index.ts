@@ -14,16 +14,22 @@ import { GifComponent } from "./components/gifComponent";
 import { MultiplexerComponent } from "./components/multiplexerComponent";
 import { ResolutionComponent } from "./components/resolutionComponent";
 import { OPCMultiOutputComponent } from "./components/opcMultiOutputComponent";
+import { SplitComponent } from "./components/splitComponent";
+import { PixelMapComponent } from "./components/pixelMapComponent";
+import { FrameMapComponent } from "./components/frameMapComponent";
 
 export default async function (container: HTMLElement) {
   const components: Component[] = [
     new NumComponent(), 
     new AddComponent(), 
+    new ResolutionComponent(),
     new ArtnetComponent(), 
     new GifComponent(),
     new MultiplexerComponent(),
-    new ResolutionComponent(),
-    new OPCMultiOutputComponent()
+    new FrameMapComponent(),
+    new PixelMapComponent(),
+    new SplitComponent(),
+    new OPCMultiOutputComponent(),
   ];
 
   const editor = new Rete.NodeEditor("pixelbridge@1.0.0", container);

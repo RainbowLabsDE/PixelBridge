@@ -40,6 +40,14 @@ select, input {
     background: #BAE1A8 !important;
 }
 
+.socket.framearr {
+  background: #4c8a2f !important;
+}
+
+.socket.rawpixelsarr {
+  background: #21e9ce !important;
+}
+
 .socket.number {
     background: #73A8DC !important;
 }
