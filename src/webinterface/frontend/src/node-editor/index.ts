@@ -18,12 +18,45 @@ import { SplitComponent } from "./components/splitComponent";
 import { PixelMapComponent } from "./components/pixelMapComponent";
 import { FrameMapComponent } from "./components/frameMapComponent";
 
+const apiUrl = 'http://localhost:8080/api/nodeEditor'; // quick hack for now. TODO: edit once frontend+backend package.json are merged
+
+const getEditorState = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${apiUrl}/editor`);
+    const resJson = await response.json();
+    console.log(resJson);
+    return resJson;
+  }
+  catch (e) {
+    return {};
+  }
+}
+
+const postEditorState = async (editorJson: string): Promise<any> => {
+  const response = await fetch(`${apiUrl}/editor`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8'
+    },
+    body: editorJson
+  });
+  return await response.json();
+}
+
+let saveTimeout: number;
+
+const saveEditorState = async (editorJson: string): Promise<any> => {
+  // wait 500ms before saving any changes as to not spam the backend
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(postEditorState, 500, editorJson);
+}
+
 export default async function (container: HTMLElement) {
   const components: Component[] = [
-    new NumComponent(), 
-    new AddComponent(), 
+    new NumComponent(),
+    new AddComponent(),
     new ResolutionComponent(),
-    new ArtnetComponent(), 
+    new ArtnetComponent(),
     new GifComponent(),
     new MultiplexerComponent(),
     new FrameMapComponent(),
@@ -48,27 +81,16 @@ export default async function (container: HTMLElement) {
     engine.register(c);
   })
 
-  const n1 = await components[0].createNode({ num: 22 });
-  const n2 = await components[0].createNode({ num: 33 });
-  const add = await components[1].createNode();
+  const editorState = await getEditorState();
+  if (Object.keys(editorState).length) {
+    editor.fromJSON(editorState);
+  }
 
-  n1.position = [80, 200];
-  n2.position = [80, 400];
-  add.position = [500, 240];
-
-  editor.addNode(n1);
-  editor.addNode(n2);
-  editor.addNode(add);
-
-  editor.connect(n1.outputs.get("numOut"), add.inputs.get("num"));
-  editor.connect(n2.outputs.get("numOut"), add.inputs.get("num2"));
-
-  editor.on(["process", "nodecreated", "noderemoved", "connectioncreated", "connectionremoved"],
-    async () => {
-      await engine.abort();
-      await engine.process(editor.toJSON());
-    }
-  );
+  editor.on(["process", "nodecreated", "noderemoved", "connectioncreated", "connectionremoved"], async () => {
+    await engine.abort();
+    await engine.process(editor.toJSON());
+    await saveEditorState(JSON.stringify(editor.toJSON()));
+  });
 
   editor.view.resize();
   AreaPlugin.zoomAt(editor);
