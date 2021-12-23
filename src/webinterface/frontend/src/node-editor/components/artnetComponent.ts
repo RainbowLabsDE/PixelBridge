@@ -10,18 +10,18 @@ export class ArtnetComponent extends Rete.Component {
     }
 
     async builder(node: Rete.Node) {
-        const in0 = new Rete.Input('outRes', "Output Resolution", ResolutionSocket);
-        const in1 = new Rete.Input('port', "Port", NumSocket);
-        const out1 = new Rete.Output('frame', "Frame", FrameSocket);
+        const resIn = new Rete.Input('outRes', "Output Resolution", ResolutionSocket);
+        const portIn = new Rete.Input('port', "Port", NumSocket);
+        const frameOut = new Rete.Output('frame', "Frame", FrameSocket);
 
-        in0.addControl(new ResolutionControl(this.editor, 'resolution', in0.name));
-        in1.addControl(new NumControl(this.editor, 'port'));
+        resIn.addControl(new ResolutionControl(this.editor, 'resolution', resIn.name));
+        portIn.addControl(new NumControl(this.editor, 'port'));
         
-        node.addInput(in0)
-            .addInput(in1)
-            .addOutput(out1);
+        node.addInput(resIn);
+        node.addInput(portIn);
+        node.addOutput(frameOut);
 
-        in1.control.putData('port', 6454);
+        portIn.control.putData('port', 6454);
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

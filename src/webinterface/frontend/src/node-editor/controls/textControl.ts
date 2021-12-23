@@ -5,13 +5,13 @@ interface TextControlProps {
     emitter: Rete.NodeEditor,
     ikey: string,
     readonly: boolean,
-  }
+}
 
 export class TextControl extends Rete.Control {
     component: any;
     props: TextControlProps;
     vueContext: any;
-    
+
     constructor(emitter: Rete.NodeEditor | null, key: string, readonly = undefined) {
         super(key);
         this.component = VueTextControl;

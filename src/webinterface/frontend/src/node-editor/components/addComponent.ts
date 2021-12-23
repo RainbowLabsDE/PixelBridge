@@ -7,18 +7,17 @@ export class AddComponent extends Rete.Component {
     constructor(){ super("Add"); }
 
     async builder(node: Node) {
-        const inp1 = new Rete.Input('num',"Number", NumSocket);
-        const inp2 = new Rete.Input('num2', "Number2", NumSocket);
-        const out = new Rete.Output('res', "Number", NumSocket);
+        const num1In = new Rete.Input('num',"Number", NumSocket);
+        const num2In = new Rete.Input('num2', "Number2", NumSocket);
+        const numOut = new Rete.Output('res', "Number", NumSocket);
 
-        inp1.addControl(new NumControl(this.editor, 'num'))
-        inp2.addControl(new NumControl(this.editor, 'num2'))
+        num1In.addControl(new NumControl(this.editor, 'num'))
+        num2In.addControl(new NumControl(this.editor, 'num2'))
 
-        node
-            .addInput(inp1)
-            .addInput(inp2)
-            .addControl(new NumControl(this.editor, 'preview', true))
-            .addOutput(out);
+        node.addInput(num1In);
+        node.addInput(num2In);
+        node.addControl(new NumControl(this.editor, 'preview', true));
+        node.addOutput(numOut);
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

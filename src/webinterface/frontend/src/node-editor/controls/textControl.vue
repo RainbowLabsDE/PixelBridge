@@ -1,5 +1,14 @@
 <template>
-<input type="text" :readonly="readonly" :value="value" :placeholder="ikey" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>
+  <input
+    type="text"
+    :readonly="readonly"
+    :value="value"
+    :placeholder="ikey"
+    @input="change($event)"
+    @dblclick.stop=""
+    @pointerdown.stop=""
+    @pointermove.stop=""
+  />
 </template>
 
 
@@ -8,7 +17,7 @@ export default {
   props: ["readonly", "emitter", "ikey", "getData", "putData"],
   data() {
     return {
-      value: 0
+      value: 0,
     };
   },
   methods: {
@@ -19,16 +28,17 @@ export default {
     update() {
       if (this.ikey) this.putData(this.ikey, this.value);
       this.emitter.trigger("process");
-    }
+    },
   },
   mounted() {
     this.value = this.getData(this.ikey);
-  }
-}
+  },
+};
 </script>
 
 <style>
-select, input {
+select,
+input {
   width: 100%;
   border-radius: 30px;
   background-color: white;

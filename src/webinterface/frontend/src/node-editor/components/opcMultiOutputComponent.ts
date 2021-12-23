@@ -10,7 +10,7 @@ export class OPCMultiOutputComponent extends Rete.Component {
     }
 
     async builder(node: Rete.Node) {
-        
+
         const onChange = (i: number) => {
             let numAddressInputs = 0;
             node.controls.forEach((control, _) => {
@@ -28,9 +28,9 @@ export class OPCMultiOutputComponent extends Rete.Component {
             }
             node.update();
         }
-        
+
         const pixelIn = new Rete.Input('rawPixIn', "RawPixels[]", RawPixelArrSocket);
-        
+
         node.addInput(pixelIn);
         node.addControl(new NumControl(this.editor, 'count', false, onChange));
 

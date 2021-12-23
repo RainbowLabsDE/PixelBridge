@@ -9,11 +9,11 @@ export class MultiplexerComponent extends Rete.Component {
     }
 
     async builder(node: Rete.Node) {
-        const in1 = new Rete.Input('framesIn', "Frame Inputs", FrameSocket, true);
-        const out1 = new Rete.Output('frame', "Frame", FrameSocket);
+        const framesIn = new Rete.Input('framesIn', "Frame Inputs", FrameSocket, true);
+        const frameOut = new Rete.Output('frame', "Frame", FrameSocket);
 
-        node.addInput(in1)
-            .addOutput(out1);
+        node.addInput(framesIn);
+        node.addOutput(frameOut);
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

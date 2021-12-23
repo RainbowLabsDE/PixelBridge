@@ -9,15 +9,15 @@ export class SplitComponent extends Rete.Component {
     }
 
     async builder(node: Rete.Node) {
-        const in1 = new Rete.Input('frames', "Frame Input", FrameSocket);
-        const out1 = new Rete.Output('frameArr', "Frame[]", FrameArraySocket);
-        const inRes = new Rete.Input('res', "Single Module Resolution", ResolutionSocket);
+        const framesIn = new Rete.Input('frames', "Frame Input", FrameSocket);
+        const frameArrOut = new Rete.Output('frameArr', "Frame[]", FrameArraySocket);
+        const resIn = new Rete.Input('res', "Single Module Resolution", ResolutionSocket);
 
-        inRes.addControl(new ResolutionControl(this.editor, 'resCtrl', inRes.name));
-        
-        node.addInput(inRes);
-        node.addInput(in1);
-        node.addOutput(out1);
+        resIn.addControl(new ResolutionControl(this.editor, 'resCtrl', resIn.name));
+
+        node.addInput(resIn);
+        node.addInput(framesIn);
+        node.addOutput(frameArrOut);
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

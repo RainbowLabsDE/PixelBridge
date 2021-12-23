@@ -4,11 +4,11 @@ import { NumControl } from "../controls/numControl";
 import { NumSocket } from "../sockets/sockets";
 
 export class NumComponent extends Rete.Component {
-    constructor(){ super("Number"); }
+    constructor() { super("Number"); }
 
     async builder(node: Node) {
-        const out1 = new Rete.Output('numOut', "Number", NumSocket);
-        node.addControl(new NumControl(this.editor, 'num')).addOutput(out1);
+        const numOut = new Rete.Output('numOut', "Number", NumSocket);
+        node.addControl(new NumControl(this.editor, 'num')).addOutput(numOut);
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
