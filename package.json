@@ -5,25 +5,52 @@
   "main": "main.ts",
   "dependencies": {
     "@types/sharp": "^0.26.1",
+    "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "sharp": "^0.26.3"
+    "rete": "^1.4.5",
+    "rete-area-plugin": "^0.2.1",
+    "rete-code-plugin": "^0.2.0",
+    "rete-comment-plugin": "^0.7.0-rc.1",
+    "rete-connection-plugin": "^0.9.0",
+    "rete-context-menu-plugin": "^0.6.0",
+    "rete-history-plugin": "^0.2.2",
+    "rete-minimap-plugin": "^0.3.1",
+    "rete-vue-render-plugin": "^0.5.0",
+    "sharp": "^0.26.3",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^9.1.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.9",
     "@types/node": "^14.14.10",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "concurrently": "^6.5.1",
     "copyfiles": "^2.4.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
     "nodemon": "^2.0.15",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "vue-template-compiler": "^2.6.11"
   },
   "scripts": {
+    "start": "npm run build && node dist/main.js",
+    "dev": "concurrently --kill-others \"nodemon --watch src --ignore src/webinterface/frontend -e ts --exec npm run startBackend\" \"npm run devWebsite\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "copyFiles": "copyfiles -u 3 src/webinterface/frontend/dist/** dist/webinterface/frontend",
-    "build": "tsc && npm run copyFiles",
-    "start": "npm run build && node dist/main.js",
-    "devWebsite": "nodemon -e html,css,js,png,jpg --watch src --exec npm run copyFiles",
-    "dev": "nodemon --watch src -e ts --exec npm start"
+    "build": "tsc && npm run buildWebsite",
+    "buildBackend": "tsc",
+    "buildWebsite": "vue-cli-service buildBackend",
+    "startBackend": "npm run buildBackend && node dist/main.js",
+    "devWebsite": "vue-cli-service serve"
   },
   "author": "",
   "license": "MIT"

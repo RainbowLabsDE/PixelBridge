@@ -17,8 +17,10 @@ import { OPCMultiOutputComponent } from "./components/opcMultiOutputComponent";
 import { SplitComponent } from "./components/splitComponent";
 import { PixelMapComponent } from "./components/pixelMapComponent";
 import { FrameMapComponent } from "./components/frameMapComponent";
+import Vue from "vue";
 
-const apiUrl = 'http://localhost:8080/api/nodeEditor'; // quick hack for now. TODO: edit once frontend+backend package.json are merged
+// in dev mode, UI is hosted on different port, could probably be solved more elegant
+const apiUrl = Vue.config.devtools ? 'http://localhost:8080/api/nodeEditor' : '/api/nodeEditor';
 
 const getEditorState = async (): Promise<any> => {
     try {
@@ -40,7 +42,7 @@ const postEditorState = async (editorJson: string): Promise<any> => {
         },
         body: editorJson
     });
-    return await response.json();
+    return response;
 }
 
 let saveTimeout: number;
