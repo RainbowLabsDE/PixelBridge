@@ -4,9 +4,9 @@ import { ResolutionControl } from "../controls/resolutionControl";
 import { TextControl } from "../controls/textControl";
 import { FrameSocket, ResolutionSocket, TextSocket } from "../sockets/sockets";
 
-export class GifComponent extends Rete.Component {
+export class GifInputComponent extends Rete.Component {
     constructor() {
-        super("GIF");
+        super("GIF Input");
     }
 
     async builder(node: Rete.Node) {

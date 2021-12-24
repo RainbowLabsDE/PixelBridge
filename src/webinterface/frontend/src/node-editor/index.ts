@@ -9,8 +9,8 @@ import HistoryPlugin from 'rete-history-plugin';
 import CommentPlugin from 'rete-comment-plugin';
 import { NumComponent } from "./components/numComponent";
 import { AddComponent } from "./components/addComponent";
-import { ArtnetComponent } from "./components/artnetComponent";
-import { GifComponent } from "./components/gifComponent";
+import { ArtnetInputComponent } from "./components/artnetInputComponent";
+import { GifInputComponent } from "./components/gifInputComponent";
 import { MultiplexerComponent } from "./components/multiplexerComponent";
 import { ResolutionComponent } from "./components/resolutionComponent";
 import { OPCMultiOutputComponent } from "./components/opcMultiOutputComponent";
@@ -18,9 +18,12 @@ import { SplitComponent } from "./components/splitComponent";
 import { PixelMapComponent } from "./components/pixelMapComponent";
 import { FrameMapComponent } from "./components/frameMapComponent";
 import Vue from "vue";
+import { Tpm2InputComponent } from "./components/tpm2InputComponent";
+import { OpcInputComponent } from "./components/opcInputComponent";
+import { SerialOutputComponent } from "./components/serialOutputComponent";
 
 // in dev mode, UI is hosted on different port, could probably be solved more elegant
-const apiUrl = Vue.config.devtools ? 'http://localhost:8080/api/nodeEditor' : '/api/nodeEditor';
+const apiUrl = Vue.config.devtools ? `http://${window.location.hostname}:8080/api/nodeEditor` : '/api/nodeEditor';
 
 const getEditorState = async (): Promise<any> => {
     try {
@@ -58,13 +61,16 @@ export default async function (container: HTMLElement) {
         new NumComponent(),
         new AddComponent(),
         new ResolutionComponent(),
-        new ArtnetComponent(),
-        new GifComponent(),
+        new ArtnetInputComponent(),
+        new GifInputComponent(),
+        new OpcInputComponent(),
+        new Tpm2InputComponent(),
         new MultiplexerComponent(),
         new FrameMapComponent(),
         new PixelMapComponent(),
         new SplitComponent(),
         new OPCMultiOutputComponent(),
+        new SerialOutputComponent(),
     ];
 
     const editor = new Rete.NodeEditor("pixelbridge@1.0.0", container);
@@ -91,6 +97,8 @@ export default async function (container: HTMLElement) {
     editor.on(["process", "nodecreated", "noderemoved", "connectioncreated", "connectionremoved"], async () => {
         await engine.abort();
         await engine.process(editor.toJSON());
+    });
+    editor.on(["process", "nodecreated", "noderemoved", "connectioncreated", "connectionremoved", "nodetranslated"], async () => {
         await saveEditorState(JSON.stringify(editor.toJSON()));
     });
 
