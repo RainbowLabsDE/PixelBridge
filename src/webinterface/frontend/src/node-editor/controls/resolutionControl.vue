@@ -1,8 +1,8 @@
 <template>
 <div class="resolution-control">
   <span>{{title}}:</span>
-  <input type="number" :readonly="readonly" :value="value.x" placeholder="X" min="0" @input="change($event, 'x')" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>
-  <input type="number" :readonly="readonly" :value="value.y" placeholder="Y" min="0" @input="change($event, 'y')" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>
+  <input type="number" :readonly="readonly" :value="value.x" placeholder="X" min="0" @input="change($event, 'x')" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop="" @wheel.stop=""/>
+  <input type="number" :readonly="readonly" :value="value.y" placeholder="Y" min="0" @input="change($event, 'y')" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop="" @wheel.stop=""/>
 </div>
 </template>
 

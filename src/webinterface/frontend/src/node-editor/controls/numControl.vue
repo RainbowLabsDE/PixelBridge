@@ -1,5 +1,5 @@
 <template>
-<input type="number" :readonly="readonly" :value="value" :placeholder="ikey" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop=""/>
+<input type="number" :readonly="readonly" :value="value" :placeholder="ikey" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop="" @wheel.stop=""/>
 </template>
 
 <script>
@@ -22,7 +22,9 @@ export default {
         this.putData(this.ikey, this.value)
       }
       this.emitter.trigger('process');
-      this.onChange(this.value);
+      if (this.onChange) {
+        this.onChange(this.value);
+      }
     }
   },
   mounted() {
