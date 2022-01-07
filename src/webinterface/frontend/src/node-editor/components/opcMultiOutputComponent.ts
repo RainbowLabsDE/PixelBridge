@@ -32,9 +32,11 @@ export class OPCMultiOutputComponent extends Rete.Component {
         const pixelIn = new Rete.Input('rawPixIn', "RawPixels[]", RawPixelArrSocket);
 
         node.addInput(pixelIn);
-        node.addControl(new NumControl(this.editor, 'count', false, onChange));
+        const countCtrl = new NumControl(this.editor, 'count', false, onChange);
+        node.addControl(countCtrl);
 
-        onChange(0);
+        // initialize component with correct amount of fields
+        onChange(Number(countCtrl.getData('count')));
 
     }
 
