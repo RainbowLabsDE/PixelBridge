@@ -1,15 +1,19 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import { config } from '../config/config';
+import { NodeEngine } from './nodeEngine';
 
 
 export class WebServer {
     private app: express.Application;
+    nodeEngine: NodeEngine;
 
     constructor() {
         this.initServer();
+        this.nodeEngine = new NodeEngine();
+        console.log(this.nodeEngine);
     }
-    
+
     private initServer() {
         this.app = express();
 
@@ -50,12 +54,13 @@ export class WebServer {
         res.json(config.nodeEditor.editorState);
     }
 
-    postEditorState(req: express.Request, res: express.Response) {
+    postEditorState = (req: express.Request, res: express.Response) => {
         // console.log(`[Web] received editor state:`);
         // console.log(req.body);
         config.nodeEditor.editorState = req.body;
         config.save();
         res.end();
+        this.nodeEngine.process(config.nodeEditor.editorState);
     }
 }
 

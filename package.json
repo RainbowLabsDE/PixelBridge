@@ -15,6 +15,7 @@
     "rete-connection-plugin": "^0.9.0",
     "rete-context-menu-plugin": "^0.6.0",
     "rete-history-plugin": "^0.2.2",
+    "rete-keyboard-plugin": "^0.1.2",
     "rete-minimap-plugin": "^0.3.1",
     "rete-vue-render-plugin": "^0.5.0",
     "sharp": "^0.26.3",
@@ -48,7 +49,7 @@
     "copyFiles": "copyfiles -u 3 src/webinterface/frontend/dist/** dist/webinterface/frontend",
     "build": "tsc && npm run buildWebsite",
     "buildBackend": "tsc",
-    "buildWebsite": "vue-cli-service buildBackend",
+    "buildWebsite": "vue-cli-service build",
     "startBackend": "npm run buildBackend && node dist/main.js",
     "devWebsite": "vue-cli-service serve"
   },

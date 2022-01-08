@@ -3,6 +3,7 @@ import VueRenderPlugin from "rete-vue-render-plugin";
 import ConnectionPlugin from "rete-connection-plugin";
 import AreaPlugin from "rete-area-plugin";
 import ContextMenuPlugin from "rete-context-menu-plugin";
+import Keyboardlugin from 'rete-keyboard-plugin';
 import MinimapPlugin from "rete-minimap-plugin";
 // import CodePlugin from 'rete-code-plugin';
 import HistoryPlugin from 'rete-history-plugin';
@@ -77,6 +78,7 @@ export default async function (container: HTMLElement) {
     editor.use(ConnectionPlugin);
     editor.use(VueRenderPlugin);
     editor.use(ContextMenuPlugin);
+    editor.use(Keyboardlugin);
     editor.use(AreaPlugin);
     editor.use(MinimapPlugin);
     editor.use(HistoryPlugin, { keyboard: true });
