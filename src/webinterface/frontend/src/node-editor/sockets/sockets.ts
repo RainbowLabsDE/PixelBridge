@@ -7,6 +7,5 @@ const RawPixelSocket = new Rete.Socket('RawPixels');
 const RawPixelArrSocket = new Rete.Socket('RawPixelsArr');
 const TextSocket = new Rete.Socket('Text');
 const ResolutionSocket = new Rete.Socket('Resolution');
-const EventSocket = new Rete.Socket('Event');
-export { NumSocket, FrameSocket, FrameArraySocket, RawPixelSocket, RawPixelArrSocket, TextSocket, ResolutionSocket, EventSocket };
+export { NumSocket, FrameSocket, FrameArraySocket, RawPixelSocket, RawPixelArrSocket, TextSocket, ResolutionSocket };
 

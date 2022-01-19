@@ -7,7 +7,7 @@ export class MultiplexerComponentWorker extends Rete.Component {
     }
 
     task = {
-        outputs: {event: 'option', frame: 'output'}
+        outputs: {frame: 'option'}
     }
 
     async builder(node: Rete.Node) {
@@ -16,8 +16,6 @@ export class MultiplexerComponentWorker extends Rete.Component {
 
     async worker(node: NodeData, inputs: any, data: any) {
         console.log("Multiplex", inputs, data);
-        // @ts-ignore:next-line
-        this.next.forEach(t => t.task.reset()); // hacky workaround so rete doesn't optimize away the "unchanging" output of next node, as there is no way to reset the current worker from within itself?
-        return {frame: inputs.framesIn[0] / 10};
+        data.fromId = node.id;
     }
 }

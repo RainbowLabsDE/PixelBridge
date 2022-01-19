@@ -11,14 +11,14 @@ export class GifInputComponentWorker extends Rete.Component {
     interval = {};
 
     task = {
-        outputs: {event: 'option', frame: 'output'},
+        outputs: {frame: 'option'},
         init: (task, node) => { // gets called on engine.process
             console.log('Task init', task, node, task.inputs.outRes);
             task.run(null);
             if (this.interval[node.id]) {
                 clearInterval(this.interval[node.id]);
             }
-            this.interval[node.id] = setInterval(() => {task.run({timestamp: Date.now()});}, node.id * 100);
+            this.interval[node.id] = setInterval(() => {task.run({timestamp: Date.now()});}, 1000);
         }
     };
     closed: any;
@@ -41,8 +41,7 @@ export class GifInputComponentWorker extends Rete.Component {
         }
         else {
             this.closed = [];
-            this.next.forEach(t => t.task.reset()); // hacky workaround so rete doesn't optimize away the "unchanging" output of next node, as there is no way to reset the current worker from within itself?
-            return {frame: node.id /*(data / 1000) % 3600*/};   // only applicable when using frame as output instead of option
+            data.fromId = node.id;
         }
     }
 }
