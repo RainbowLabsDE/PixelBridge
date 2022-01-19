@@ -1,4 +1,4 @@
-interface Resolution {
+export interface Resolution {
     x: number;
     y: number;
 }

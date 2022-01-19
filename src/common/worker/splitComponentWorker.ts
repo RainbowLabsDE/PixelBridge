@@ -1,66 +1,76 @@
 import * as Rete from "rete";
 import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
+import { SplitFrameToModulesConverter } from "../../converters/SplitFrameToModulesConverter";
 import { Frame } from "../frame.interface";
 import { FrameArr } from "../frameArr.interface";
+import { Resolution } from "../resolution.interface";
+import { ReteTask } from "../reteTask.interface";
+import { createOrReconfigureInstance, InstanceState } from "../util";
+
+interface SplitComponentParams {
+    resolution: Resolution;
+}
+
+interface SplitComponentState extends InstanceState {
+    instance: SplitFrameToModulesConverter;
+    params: SplitComponentParams;
+}
 
 export class SplitComponentWorker extends Rete.Component {
     constructor() {
         super("Split");
     }
 
+    converters: {[id: number]: SplitComponentState} = {};
+    tasks: {[id: number]: ReteTask} = {};
+
     [x: string]: any;   // make Typescript happy (allow arbitrary member variables, as there is no definition file for Rete Tasks)
     task = {
-        outputs: {frameArr: 'option'}
+        outputs: {frameArr: 'option'},
+        init: (task: ReteTask, node: NodeData) => { // gets called on engine.process
+            this.tasks[node.id] = task;
+            task.run(null);                         // init node instance with parameters from inputs (has to be done via the worker)
+        }
     }
 
     async builder(node: Rete.Node) {
         // see node builder definition in webinterface/frontend/src/node-editor/components
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
-        // TODO: do parameter getting and precalculation only once during init
-        // TODO: check why resolution doesn't update anymore when chaning the flow without restarting
-
+    initBackend = async (node: NodeData, inputs: WorkerInputs) => {
         // get node parameters
         const moduleRes = (inputs['res']?.length ? inputs['res'][0] : node.data.resolution) as Resolution;
-        // console.log(inputs, moduleRes);
 
         // check for undefined parameters
         if (moduleRes?.x == undefined || moduleRes?.y == undefined) {
-            this.closed = ['frameArr']; // stop propagating event
+            return;
+        }
+
+        const params: SplitComponentParams = {
+            resolution: moduleRes
+        };
+
+        createOrReconfigureInstance(node, this.converters, params, () =>
+            new SplitFrameToModulesConverter(params.resolution.x, params.resolution.y)
+        );
+    }
+    
+    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+        // TODO: do parameter getting and precalculation only once during init
+        
+        if (data === null) {
+            this.closed = ['frameArr'];                 // stop propagating event
+            this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
+        }
+        else if (this.component.converters[node.id]?.instance) {
+            this.closed = [];                           // enable propagating event again
+            data.fromId = node.id;
+            data.frameArr = await this.component.converters[node.id].instance.convert(data.frame); 
+            // console.log(data.frameArr); 
         }
         else {
-            const frame = data.frame as Frame;
-            let frameArr: FrameArr = {
-                width: Math.ceil(frame.width / moduleRes.x),
-                height: Math.ceil(frame.height / moduleRes.y),
-                frames: []
-            }
-            // initialize frame array
-            frameArr.frames = Array.from({length: frameArr.width * frameArr.height}, (): Frame => {
-                return {
-                    width: moduleRes.x,
-                    height: moduleRes.y,
-                    buffer: Buffer.alloc(moduleRes.x * moduleRes.y * 3)
-                }
-            });
-
-            // traverse through modules column-wise, starting top left and copy buffers to the respective module frames to split a single frame into modules
-            for (let xFrame = 0; xFrame < frameArr.width; xFrame++) {   // iterate through modules in x direction
-                for (let y = 0; y < frame.height; y++) {                // iterate through individual lines in y direction
-                    let moduleId = xFrame + Math.floor(y / moduleRes.y) * frameArr.width;   // calculate module id
-                    let sourceOffset = ((xFrame * moduleRes.x) + (y * frame.width)) * 3;
-                    let targetOffset = Math.floor(y % moduleRes.y) * moduleRes.x * 3;
-                    let length = moduleRes.x * 3;
-                    frame.buffer.copy(frameArr.frames[moduleId].buffer, targetOffset, sourceOffset, sourceOffset + length);
-                }
-            }
-
-            data.fromId = node.id;
-            data.frameArr = frameArr;
-            // console.log(frameArr);
+            this.closed = ['frameArr'];                 // stop propagating event
         }
-
 
     }
 }
