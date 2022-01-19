@@ -15,7 +15,7 @@ export class MultiplexerComponentWorker extends Rete.Component {
     }
 
     async worker(node: NodeData, inputs: any, data: any) {
-        console.log("Multiplex", inputs, data);
+        // currently does nothing with the data passed through it
         data.fromId = node.id;
     }
 }

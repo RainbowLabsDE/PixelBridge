@@ -15,7 +15,6 @@ export class ResolutionComponentWorker extends Rete.Component {
     }
 
     async worker(node: NodeData, inputs: WorkerInputs, data: any) {
-        console.log('Res worker')
         return {res: node.data.resolution};
     }
 }

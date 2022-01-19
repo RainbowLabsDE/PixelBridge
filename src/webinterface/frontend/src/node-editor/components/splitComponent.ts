@@ -13,7 +13,7 @@ export class SplitComponent extends Rete.Component {
         const frameArrOut = new Rete.Output('frameArr', "Frame[]", FrameArraySocket);
         const resIn = new Rete.Input('res', "Single Module Resolution", ResolutionSocket);
 
-        resIn.addControl(new ResolutionControl(this.editor, 'resCtrl', resIn.name));
+        resIn.addControl(new ResolutionControl(this.editor, 'resolution', resIn.name));
 
         node.addInput(resIn);
         node.addInput(framesIn);
