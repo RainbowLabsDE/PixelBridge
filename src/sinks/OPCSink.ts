@@ -1,6 +1,7 @@
 import { BaseSink } from "./BaseSink"
 
 import * as dgram from "dgram";
+import { Frame } from "../common/frame.interface";
 
 export class OPCSink extends BaseSink {
     protected udp: dgram.Socket;
@@ -23,6 +24,7 @@ export class OPCSink extends BaseSink {
         buf.writeUInt8(0, 1); // command
         buf.writeUInt16BE(length, 2); // length
         frame.buffer.copy(buf, 4);
+        // console.log(this.port);
 
         await new Promise((resolve, reject) => this.udp.send(buf, resolve));
     }

@@ -1,5 +1,6 @@
 import * as Rete from "rete";
 import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
+import { Frame } from "../frame.interface";
 import { FrameArr } from "../frameArr.interface";
 
 export class SplitComponentWorker extends Rete.Component {

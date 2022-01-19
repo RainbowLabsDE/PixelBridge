@@ -2,6 +2,7 @@ import * as Rete from "rete";
 
 import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
 import { ArtnetSource } from "../../sources/ArtnetSource";
+import { Frame } from "../frame.interface";
 
 interface ArtnetInputParams {
     port: number;

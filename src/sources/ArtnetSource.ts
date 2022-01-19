@@ -2,6 +2,7 @@ import { BaseSource } from "./BaseSource";
 
 import * as dgram from "dgram";
 import { start } from "repl";
+import { Frame } from "../common/frame.interface";
 
 const artnetPort = 6454;
 

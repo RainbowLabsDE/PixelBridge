@@ -1,5 +1,6 @@
 import { BaseSource } from "./BaseSource";
 import * as sharp from "sharp"
+import { Frame } from "../common/frame.interface";
 
 export class GifSource extends BaseSource {
     private gifBuf: Buffer;
