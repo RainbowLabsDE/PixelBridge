@@ -6,11 +6,16 @@ export class ResolutionComponentWorker extends Rete.Component {
         super("Resolution");
     }
 
+    task = {
+        outputs: {res: 'output'}
+    }
+
     async builder(node: Rete.Node) {
         // see node builder definition in webinterface/frontend/src/node-editor/components
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
-        outputs['res'] = node.data.resolution;
+    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+        console.log('Res worker')
+        return {res: node.data.resolution};
     }
 }

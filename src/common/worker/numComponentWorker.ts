@@ -4,6 +4,10 @@ import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
 export class NumComponentWorker extends Rete.Component {
     constructor() { super("Number"); }
 
+    task = {
+        outputs: {}
+    }
+
     async builder(node: Node) {
         // see node builder definition in webinterface/frontend/src/node-editor/components
     }

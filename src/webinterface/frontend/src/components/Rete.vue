@@ -36,6 +36,8 @@ select, input {
   width: 170px;
 }
 
+/* TODO: get rid of !importants */
+
 .socket.frame {
     background: #BAE1A8 !important;
 }
@@ -59,4 +61,12 @@ select, input {
 .socket.resolution {
     background: lightcoral !important;
 }
+
+.socket.event {
+    background: whitesmoke !important;
+    border-color: grey !important;
+    border-radius: 2px !important;
+    width: 16px !important;
+}
+
 </style>

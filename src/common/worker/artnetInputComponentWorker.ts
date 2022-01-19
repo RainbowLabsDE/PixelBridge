@@ -20,6 +20,10 @@ export class ArtnetInputComponentWorker extends Rete.Component {
 
     artnetSources: {[id: number]: ArtnetInputState} = {};
 
+    task = {
+        outputs: {}
+    }
+
     async builder(node: Rete.Node) {
         // see node builder definition in webinterface/frontend/src/node-editor/components
     }

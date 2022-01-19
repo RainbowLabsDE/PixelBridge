@@ -8,6 +8,7 @@ import MinimapPlugin from "rete-minimap-plugin";
 // import CodePlugin from 'rete-code-plugin';
 import HistoryPlugin from 'rete-history-plugin';
 import CommentPlugin from 'rete-comment-plugin';
+import TaskPlugin from 'rete-task-plugin';
 import { NumComponent } from "./components/numComponent";
 import { AddComponent } from "./components/addComponent";
 import { ArtnetInputComponent } from "./components/artnetInputComponent";
@@ -83,6 +84,7 @@ export default async function (container: HTMLElement) {
     editor.use(MinimapPlugin);
     editor.use(HistoryPlugin, { keyboard: true });
     editor.use(CommentPlugin, { margin: 20 });
+    // editor.use(TaskPlugin);
 
     const engine = new Rete.Engine("pixelbridge@1.0.0");
 

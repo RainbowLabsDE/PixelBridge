@@ -6,11 +6,16 @@ export class SplitComponentWorker extends Rete.Component {
         super("Split");
     }
 
+    task = {
+        outputs: {event: 'option', frameArr: 'output'}
+    }
+
     async builder(node: Rete.Node) {
         // see node builder definition in webinterface/frontend/src/node-editor/components
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
-        console.log("SplitWorker", node, inputs);
+    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+        console.log("SplitWorker", inputs, data);
+        return {frameArr: 'whatever'};
     }
 }
