@@ -9,6 +9,7 @@ import { ResolutionComponentWorker } from "../common/worker/resolutionComponentW
 import { SplitComponentWorker } from "../common/worker/splitComponentWorker";
 import { GifInputComponentWorker } from "../common/worker/gifInputComponentWorker";
 import { MultiplexerComponentWorker } from "../common/worker/multiplexerComponentWorker";
+import { FrameMapComponentWorker } from "../common/worker/frameMapComponentWorker";
 
 
 export class NodeEngine {
@@ -21,7 +22,8 @@ export class NodeEngine {
             new ResolutionComponentWorker(),
             new NumComponentWorker(),
             new GifInputComponentWorker(),
-            new MultiplexerComponentWorker()            
+            new MultiplexerComponentWorker(),
+            new FrameMapComponentWorker()        
         ];
         this.engine = new Rete.Engine('pixelbridge@1.0.0');
         this.engine.use(TaskPlugin);

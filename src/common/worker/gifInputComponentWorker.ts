@@ -1,5 +1,6 @@
 import * as Rete from "rete";
 import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
+import { Frame } from "../frame.interface";
 
 // currently does only dummy stuff (my debug node for testing out Rete Tasks)
 export class GifInputComponentWorker extends Rete.Component {
@@ -19,7 +20,19 @@ export class GifInputComponentWorker extends Rete.Component {
             if (this.interval[node.id]) {
                 clearInterval(this.interval[node.id]);
             }
-            this.interval[node.id] = setInterval(() => {task.run({timestamp: Date.now()});}, 1000);
+            const frm: Frame = {
+                width: 16,
+                height: 16,
+                buffer: Buffer.alloc(16 * 16 * 3)
+            }
+            for (let i = 0; i < frm.buffer.length; i++) {
+                frm.buffer[i] = Math.floor(i/3) % 256;
+            }
+            this.interval[node.id] = setInterval(() => {
+                task.run({
+                    frame: frm
+                });
+            }, 10000);
         }
     };
 
@@ -42,6 +55,6 @@ export class GifInputComponentWorker extends Rete.Component {
             this.closed = [];
             data.fromId = node.id;
         }
-        console.log("GifWorker", inputs, data);
+        // console.log("GifWorker", inputs, data);
     }
 }

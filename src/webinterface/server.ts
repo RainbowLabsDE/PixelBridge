@@ -11,7 +11,7 @@ export class WebServer {
     constructor() {
         this.initServer();
         this.nodeEngine = new NodeEngine();
-        console.log(this.nodeEngine);
+        // console.log(this.nodeEngine);
     }
 
     private initServer() {
