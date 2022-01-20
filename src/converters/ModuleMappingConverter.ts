@@ -20,10 +20,6 @@ export class ModuleMappingConverter {
     // TODO: do parameter getting and precalculation only once during init
     // TODO: implement rotation of frames
     async convert(frameArr: FrameArr): Promise<FrameArr> {
-        const w = frameArr.width;
-        const h = frameArr.height;
-        // console.log(w, h);
-
         const snake = this.moduleMappingParams.mapType == 'snake';
         const vertical = this.moduleMappingParams.mapOrientation == 'vert';
         const startingLeft = this.moduleMappingParams.mapStart == 'tl' || this.moduleMappingParams.mapStart == 'bl';

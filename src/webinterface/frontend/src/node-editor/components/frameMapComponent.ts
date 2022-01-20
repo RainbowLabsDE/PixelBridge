@@ -26,8 +26,8 @@ export class FrameMapComponent extends Rete.Component {
 
         const mapFlipOptions: SelectionOption[] = [
             { value: 'none', name: 'No flipping' },
-            { value: 'even', name: 'Even Lines Flipped' },
-            { value: 'odd', name: 'Odd Lines Flipped' },
+            { value: 'even', name: 'Even Lines Flipped (Not implemented yet)' },
+            { value: 'odd', name: 'Odd Lines Flipped (Not implemented yet)' },
         ];
         const ctrlMapFlip = new SelectionControl(this.editor, 'mapFlipCtrl', "Mapping Flip", mapFlipOptions);
 
