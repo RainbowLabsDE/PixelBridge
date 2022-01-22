@@ -10,20 +10,22 @@ import { SplitComponentWorker } from "../common/worker/splitComponentWorker";
 import { GifInputComponentWorker } from "../common/worker/gifInputComponentWorker";
 import { MultiplexerComponentWorker } from "../common/worker/multiplexerComponentWorker";
 import { FrameMapComponentWorker } from "../common/worker/frameMapComponentWorker";
+import { BackendInstanceManager } from "../common/backendInstanceManager";
 
 
 export class NodeEngine {
     engine: Rete.Engine;
+    instMgr = new BackendInstanceManager();
 
     constructor() {
         const components: Rete.Component[] = [
-            new ArtnetInputComponentWorker(),
-            new SplitComponentWorker(),
+            new ArtnetInputComponentWorker(this.instMgr),
+            new SplitComponentWorker(this.instMgr),
             new ResolutionComponentWorker(),
             new NumComponentWorker(),
             new GifInputComponentWorker(),
             new MultiplexerComponentWorker(),
-            new FrameMapComponentWorker()        
+            new FrameMapComponentWorker(this.instMgr)        
         ];
         this.engine = new Rete.Engine('pixelbridge@1.0.0');
         this.engine.use(TaskPlugin);
@@ -35,8 +37,10 @@ export class NodeEngine {
 
 
     process = async (data: Data) => {
-        this.engine.abort();
-        this.engine.process(data);
+        await this.engine.abort();
+        // TODO: check for removed nodes and remove them from instance manager
+        // TODO: detect if completely new config got loaded and remove all instances in this case
+        return this.engine.process(data);
     }
 
 }

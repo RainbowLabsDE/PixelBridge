@@ -1,23 +1,15 @@
 import * as Rete from "rete";
-import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
+import { NodeData, WorkerInputs } from "rete/types/core/data";
 import { ModuleMapFlip, ModuleMapOrientation, ModuleMappingConverter, ModuleMappingParams, ModuleMapStart, ModuleMapType } from "../../converters/ModuleMappingConverter";
-import { SplitFrameToModulesConverter } from "../../converters/SplitFrameToModulesConverter";
+import { BackendInstanceManager } from "../backendInstanceManager";
 import { ReteTask } from "../reteTask.interface";
-import { createOrReconfigureInstance, InstanceState } from "../util";
 
-
-
-interface FrameMapComponentState extends InstanceState {
-    instance: SplitFrameToModulesConverter;
-    params: ModuleMappingParams;
-}
 
 export class FrameMapComponentWorker extends Rete.Component {
-    constructor() {
+    constructor(protected instMgr: BackendInstanceManager) {
         super("Frame Mapping");
     }
 
-    converters: { [id: number]: FrameMapComponentState } = {};
     tasks: { [id: number]: ReteTask } = {};
 
     [x: string]: any;   // make Typescript happy (allow arbitrary member variables, as there is no definition file for Rete Tasks)
@@ -48,7 +40,7 @@ export class FrameMapComponentWorker extends Rete.Component {
             return;
         }
 
-        createOrReconfigureInstance(node, this.converters, params, () =>
+        this.instMgr.createOrReconfigureInstance(node, params, () =>
             new ModuleMappingConverter(params)
         );
     }
@@ -58,10 +50,10 @@ export class FrameMapComponentWorker extends Rete.Component {
             this.closed = ['frameArrOut'];              // stop propagating event
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
-        else if (this.component.converters[node.id]?.instance) {
+        else if (this.component.instMgr.getInstance(node)?.instance) {
             this.closed = [];                           // enable propagating event again
             data.fromId = node.id;
-            data.frameArr = await this.component.converters[node.id].instance.convert(data.frameArr);
+            data.frameArr = await this.component.instMgr.getInstance(node).instance.convert(data.frameArr);
         }
         else {
             this.closed = ['frameArrOut'];              // stop propagating event

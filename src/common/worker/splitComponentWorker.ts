@@ -1,27 +1,19 @@
 import * as Rete from "rete";
-import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
+import { NodeData, WorkerInputs } from "rete/types/core/data";
 import { SplitFrameToModulesConverter } from "../../converters/SplitFrameToModulesConverter";
-import { Frame } from "../frame.interface";
-import { FrameArr } from "../frameArr.interface";
+import { BackendInstanceManager } from "../backendInstanceManager";
 import { Resolution } from "../resolution.interface";
 import { ReteTask } from "../reteTask.interface";
-import { createOrReconfigureInstance, InstanceState } from "../util";
 
 interface SplitComponentParams {
     resolution: Resolution;
 }
 
-interface SplitComponentState extends InstanceState {
-    instance: SplitFrameToModulesConverter;
-    params: SplitComponentParams;
-}
-
 export class SplitComponentWorker extends Rete.Component {
-    constructor() {
+    constructor(protected instMgr: BackendInstanceManager) {
         super("Split");
     }
 
-    converters: {[id: number]: SplitComponentState} = {};
     tasks: {[id: number]: ReteTask} = {};
 
     [x: string]: any;   // make Typescript happy (allow arbitrary member variables, as there is no definition file for Rete Tasks)
@@ -50,23 +42,21 @@ export class SplitComponentWorker extends Rete.Component {
             resolution: moduleRes
         };
 
-        createOrReconfigureInstance(node, this.converters, params, () =>
+        this.instMgr.createOrReconfigureInstance(node, params, () =>
             new SplitFrameToModulesConverter(params.resolution.x, params.resolution.y)
         );
     }
     
     async worker(node: NodeData, inputs: WorkerInputs, data: any) {
         // TODO: do parameter getting and precalculation only once during init
-        
         if (data === null) {
             this.closed = ['frameArr'];                 // stop propagating event
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
-        else if (this.component.converters[node.id]?.instance) {
+        else if (this.component.instMgr.getInstance(node)?.instance) {
             this.closed = [];                           // enable propagating event again
             data.fromId = node.id;
-            data.frameArr = await this.component.converters[node.id].instance.convert(data.frame); 
-            // console.log(data.frameArr); 
+            data.frameArr = await this.component.instMgr.getInstance(node).instance.convert(data.frame); 
         }
         else {
             this.closed = ['frameArr'];                 // stop propagating event

@@ -1,11 +1,11 @@
 import * as Rete from "rete";
 
-import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
+import { NodeData, WorkerInputs } from "rete/types/core/data";
 import { ArtnetSource } from "../../sources/ArtnetSource";
+import { BackendInstanceManager, InstanceState } from "../backendInstanceManager";
 import { Frame } from "../frame.interface";
 import { Resolution } from "../resolution.interface";
 import { ReteTask } from "../reteTask.interface";
-import { createOrReconfigureInstance, InstanceState } from "../util";
 
 interface ArtnetInputParams {
     port: number;
@@ -19,11 +19,10 @@ interface ArtnetInputState extends InstanceState {
 }
 
 export class ArtnetInputComponentWorker extends Rete.Component {
-    constructor() {
+    constructor(protected instMgr: BackendInstanceManager) {
         super("ArtNet Input");
     }
 
-    artnetSources: {[id: number]: ArtnetInputState} = {};
     tasks: {[id: number]: ReteTask} = {};
 
     [x: string]: any;   // make Typescript happy (allow arbitrary member variables, as there is no definition file for Rete Tasks)
@@ -55,7 +54,7 @@ export class ArtnetInputComponentWorker extends Rete.Component {
 
         const task = this.tasks[node.id];
 
-        createOrReconfigureInstance(node, this.artnetSources, nodeParams, () => 
+        this.instMgr.createOrReconfigureInstance(node, nodeParams, () => 
             new ArtnetSource(
                 nodeParams.resolution.x, 
                 nodeParams.resolution.y, 
@@ -63,6 +62,15 @@ export class ArtnetInputComponentWorker extends Rete.Component {
                 nodeParams.port, 
                 nodeParams.startUniverse)
         );
+
+        // createOrReconfigureInstance(node, this.artnetSources, nodeParams, () => 
+        //     new ArtnetSource(
+        //         nodeParams.resolution.x, 
+        //         nodeParams.resolution.y, 
+        //         (f: Frame) => { this.tasks[node.id].run({frame: f}); }, 
+        //         nodeParams.port, 
+        //         nodeParams.startUniverse)
+        // );
     }
 
     async worker(node: NodeData, inputs: WorkerInputs, data: any) {
