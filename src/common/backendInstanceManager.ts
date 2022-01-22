@@ -38,14 +38,14 @@ export class BackendInstanceManager {
         return this.instances[node.id];
     }
 
-    async handleRemovedNodes(removedNodes: NodeData[]) {
-        removedNodes.forEach(async (node) => {
-            if (node.id in this.instances) {
+    async handleRemovedNodes(removedNodeIds: string[]) {
+        removedNodeIds.forEach(async (nodeId) => {
+            if (nodeId in this.instances) {
                 // call closing function if it exists
-                if (this.instances[node.id].instance?.close) {
-                    await this.instances[node.id].instance.close();
+                if (this.instances[nodeId].instance?.close) {
+                    await this.instances[nodeId].instance.close();
                 }
-                delete this.instances[node.id];
+                delete this.instances[nodeId];
             }
         });
     }

@@ -38,8 +38,16 @@ export class NodeEngine {
 
     process = async (data: Data) => {
         await this.engine.abort();
-        // TODO: check for removed nodes and remove them from instance manager
+
+        // check for removed nodes and remove them from instance manager
         // TODO: detect if completely new config got loaded and remove all instances in this case
+        const curNodes = this.engine.data?.nodes;
+        if (curNodes) {
+            const newNodes = data.nodes;
+            const removedNodes = Object.keys(curNodes).filter(nodeId => !Object.keys(newNodes).includes(nodeId));
+            this.instMgr.handleRemovedNodes(removedNodes);
+        }
+
         return this.engine.process(data);
     }
 
