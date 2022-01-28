@@ -1,7 +1,8 @@
 import * as Rete from "rete";
 import { NodeData, WorkerInputs } from "rete/types/core/data";
-import { ModuleMapFlip, ModuleMapOrientation, ModuleMappingConverter, ModuleMappingParams, ModuleMapStart, ModuleMapType } from "../../converters/ModuleMappingConverter";
+import { ModuleMappingConverter } from "../../converters/ModuleMappingConverter";
 import { BackendInstanceManager } from "../backendInstanceManager";
+import { MapFlip, MapOrientation, MappingParams, MapStart, MapType } from "../MappingGenerator";
 import { ReteTask } from "../reteTask.interface";
 
 
@@ -28,11 +29,11 @@ export class FrameMapComponentWorker extends Rete.Component {
     initBackend = async (node: NodeData, inputs: WorkerInputs) => {
         // get node parameters
 
-        const params: ModuleMappingParams = {
-            mapType: node.data.mapTypeCtrl as ModuleMapType,
-            mapOrientation: node.data.mapOrientCtrl as ModuleMapOrientation,
-            mapFlip: node.data.mapFlipCtrl as ModuleMapFlip,
-            mapStart: node.data.mapStartCtrl as ModuleMapStart
+        const params: MappingParams = {
+            mapType: node.data.mapTypeCtrl as MapType,
+            mapOrientation: node.data.mapOrientCtrl as MapOrientation,
+            mapFlip: node.data.mapFlipCtrl as MapFlip,
+            mapStart: node.data.mapStartCtrl as MapStart
         };
 
         // check for undefined parameters
