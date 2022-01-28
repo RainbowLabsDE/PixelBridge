@@ -13,7 +13,11 @@ export class OPCSink extends BaseSink {
     initConnection() {
         this.udp = dgram.createSocket('udp4');
         this.udp.connect(this.port, this.ip);
-        // console.log("connected");
+        console.log(`[OPC] Sink initialized for ${this.ip}:${this.port}`);
+    }
+
+    close() {
+        this.udp.close();
     }
     
     async sendFrame(frame: Frame): Promise<void> {

@@ -14,14 +14,14 @@ export interface MappingParams {
 
 export class MappingGenerator {
 
-    constructor(protected moduleMappingParams: MappingParams) { }
+    constructor(protected mappingParams: MappingParams) { }
 
     // TODO: implement rotation of frames
     async generateMapping(frameWidth: number, frameHeight: number): Promise<number[]> { 
-        const snake = this.moduleMappingParams.mapType == 'snake';
-        const vertical = this.moduleMappingParams.mapOrientation == 'vert';
-        const startingLeft = this.moduleMappingParams.mapStart == 'tl' || this.moduleMappingParams.mapStart == 'bl';
-        const startingTop = this.moduleMappingParams.mapStart == 'tl' || this.moduleMappingParams.mapStart == 'tr';
+        const snake = this.mappingParams.mapType == 'snake';
+        const vertical = this.mappingParams.mapOrientation == 'vert';
+        const startingLeft = this.mappingParams.mapStart == 'tl' || this.mappingParams.mapStart == 'bl';
+        const startingTop = this.mappingParams.mapStart == 'tl' || this.mappingParams.mapStart == 'tr';
 
         // ‧͙⁺˚* Magic, do not touch! *˚⁺‧͙
         

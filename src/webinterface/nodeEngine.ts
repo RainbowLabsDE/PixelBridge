@@ -12,6 +12,7 @@ import { MultiplexerComponentWorker } from "../common/worker/multiplexerComponen
 import { FrameMapComponentWorker } from "../common/worker/frameMapComponentWorker";
 import { BackendInstanceManager } from "../common/backendInstanceManager";
 import { PixelMapComponentWorker } from "../common/worker/pixelMapComponentWorker";
+import { OPCMultiOutputComponentWorker } from "../common/worker/opcMultiOutputComponentWorker";
 
 
 export class NodeEngine {
@@ -27,7 +28,8 @@ export class NodeEngine {
             new GifInputComponentWorker(),
             new MultiplexerComponentWorker(),
             new FrameMapComponentWorker(this.instMgr),
-            new PixelMapComponentWorker(this.instMgr)
+            new PixelMapComponentWorker(this.instMgr),
+            new OPCMultiOutputComponentWorker(this.instMgr),
         ];
         this.engine = new Rete.Engine('pixelbridge@1.0.0');
         this.engine.use(TaskPlugin);

@@ -11,7 +11,7 @@ export class PixelMappingConverter {
         if (this.moduleMappingParams.mapType == 'line' 
             && this.moduleMappingParams.mapOrientation == 'horz' 
             && this.moduleMappingParams.mapStart == 'tl') {
-            return; // nothing to do, frames are already in correct order
+            return frameArr; // nothing to do, frames are already in correct order
         }
 
         // assume that all frames have the same dimensions
