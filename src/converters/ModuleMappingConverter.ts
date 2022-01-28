@@ -25,14 +25,14 @@ export class ModuleMappingConverter {
         });
 
         // debug mapping
-        for (let y = 0; y < frameArr.height; y++) {
-            for (let x = 0; x < frameArr.width; x++) {
-                let i = y * frameArr.width + x;
-                let m = mapping[i];
-                process.stdout.write(`${m < 10 ? ' ' : ''}${m} `);
-            }
-            process.stdout.write('\n');
-        }
+        // for (let y = 0; y < frameArr.height; y++) {
+        //     for (let x = 0; x < frameArr.width; x++) {
+        //         let i = y * frameArr.width + x;
+        //         let m = mapping[i];
+        //         process.stdout.write(`${m < 10 ? ' ' : ''}${m} `);
+        //     }
+        //     process.stdout.write('\n');
+        // }
 
         return frameArr;
     }
