@@ -4,9 +4,9 @@ import { NumControl } from "../controls/numControl";
 import { ResolutionControl } from "../controls/resolutionControl";
 import { FrameSocket, NumSocket, ResolutionSocket } from "../sockets/sockets";
 
-export class Tpm2InputComponent extends Rete.Component {
+export class Tpm2NetInputComponent extends Rete.Component {
     constructor() {
-        super("TPM2 Input");
+        super("TPM2.net Input");
     }
 
     async builder(node: Rete.Node) {

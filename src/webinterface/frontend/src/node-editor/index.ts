@@ -20,7 +20,7 @@ import { SplitComponent } from "./components/splitComponent";
 import { PixelMapComponent } from "./components/pixelMapComponent";
 import { FrameMapComponent } from "./components/frameMapComponent";
 import Vue from "vue";
-import { Tpm2InputComponent } from "./components/tpm2InputComponent";
+import { Tpm2NetInputComponent } from "./components/tpm2NetInputComponent";
 import { OpcInputComponent } from "./components/opcInputComponent";
 import { SerialOutputComponent } from "./components/serialOutputComponent";
 
@@ -66,7 +66,7 @@ export default async function (container: HTMLElement) {
         new ArtnetInputComponent(),
         new GifInputComponent(),
         new OpcInputComponent(),
-        new Tpm2InputComponent(),
+        new Tpm2NetInputComponent(),
         new MultiplexerComponent(),
         new FrameMapComponent(),
         new PixelMapComponent(),
