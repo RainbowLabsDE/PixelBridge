@@ -67,7 +67,7 @@ export class OPCMultiOutputComponentWorker extends Rete.Component {
         if (data === null) {
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
-        else if (this.component.instMgr.getInstance(node)?.instance) {
+        else if (this.component.instMgr.getInstance(node)?.instance && data.frameArr?.frames) {
             const opcSinks = this.component.instMgr.getInstance(node).instance as OPCSink[];
             data.frameArr.frames.forEach((frame, i) => {
                 if (opcSinks[i]?.sendFrame) {

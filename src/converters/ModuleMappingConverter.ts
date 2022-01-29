@@ -13,7 +13,7 @@ export class ModuleMappingConverter {
             && this.moduleMappingParams.mapOrientation == 'horz' 
             && this.moduleMappingParams.mapStart == 'tl'
             && this.moduleMappingParams.mapFlip == 'none') {
-            return; // nothing to do, frames are already in correct order
+            return frameArr; // nothing to do, frames are already in correct order
         }
 
         const mapping = await new MappingGenerator(this.moduleMappingParams).generateMapping(frameArr.width, frameArr.height);
