@@ -14,6 +14,7 @@ import { BackendInstanceManager } from "../common/backendInstanceManager";
 import { PixelMapComponentWorker } from "../common/worker/pixelMapComponentWorker";
 import { OPCMultiOutputComponentWorker } from "../common/worker/opcMultiOutputComponentWorker";
 import { Tpm2NetInputComponentWorker } from "../common/worker/tpm2NetInputComponentWorker";
+import { SerialOutputComponentWorker } from "../common/worker/SerialOutputComponentWorker";
 
 
 export class NodeEngine {
@@ -32,6 +33,7 @@ export class NodeEngine {
             new PixelMapComponentWorker(this.instMgr),
             new OPCMultiOutputComponentWorker(this.instMgr),
             new Tpm2NetInputComponentWorker(this.instMgr),
+            new SerialOutputComponentWorker(this.instMgr),
         ];
         this.engine = new Rete.Engine('pixelbridge@1.0.0');
         this.engine.use(TaskPlugin);
