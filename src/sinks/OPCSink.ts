@@ -28,8 +28,8 @@ export class OPCSink extends BaseSink {
     }
 
     close() {
-        this.udp.close();
         this.open = false;
+        this.udp.close();
     }
     
     async sendFrame(frame: Frame): Promise<void> {

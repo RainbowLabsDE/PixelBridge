@@ -2,7 +2,7 @@ import * as Rete from "rete";
 import { NodeData, WorkerInputs } from "rete/types/core/data";
 import { BackendInstanceManager } from "../backendInstanceManager";
 import { ReteTask } from "../reteTask.interface";
-import { OPCSink } from "../../sinks/OPCSink";
+import { OPCMultiSink } from "../../sinks/OPCMultiSink";
 
 interface OpcMultiOutParams {
     numAddresses: number;
@@ -50,26 +50,7 @@ export class OPCMultiOutputComponentWorker extends Rete.Component {
         }
 
         this.instMgr.createOrReconfigureInstance(node, params, () =>
-            params.addresses.map(address => {
-                if (address) {
-                    try {
-                        const url = new URL('udp://' + address);
-                        const port = parseInt(url.port);
-                        if (!isNaN(port) && port >= 1 && port <= 65535) {
-                            return new OPCSink(0, 0, url.hostname, port);
-                        }
-                    }
-                    catch (e) {
-                        if (e.code == 'ERR_INVALID_URL') {
-                            // silently drop
-                        }
-                        else {
-                            console.error(e);
-                        }
-                    }
-                }
-                return null;
-            })
+            new OPCMultiSink(params.addresses)
         );
     }
 
@@ -78,13 +59,7 @@ export class OPCMultiOutputComponentWorker extends Rete.Component {
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
         else if (this.component.instMgr.getInstance(node)?.instance && data.frameArr?.frames) {
-            const opcSinks = this.component.instMgr.getInstance(node).instance as OPCSink[];
-            data.frameArr.frames.forEach((frame, i) => {
-                if (opcSinks[i]?.sendFrame) {
-                    opcSinks[i].sendFrame(frame);
-                }
-            });
-
+            this.component.instMgr.getInstance(node).instance.sendFrames(data.frameArr.frames);
         }
 
     }
