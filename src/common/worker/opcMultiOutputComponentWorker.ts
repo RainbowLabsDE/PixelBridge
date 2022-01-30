@@ -52,10 +52,20 @@ export class OPCMultiOutputComponentWorker extends Rete.Component {
         this.instMgr.createOrReconfigureInstance(node, params, () =>
             params.addresses.map(address => {
                 if (address) {
-                    const url = new URL('udp://' + address);
-                    const port = parseInt(url.port);
-                    if (!isNaN(port) && port >= 1 && port <= 65535) {
-                        return new OPCSink(0, 0, url.hostname, port);
+                    try {
+                        const url = new URL('udp://' + address);
+                        const port = parseInt(url.port);
+                        if (!isNaN(port) && port >= 1 && port <= 65535) {
+                            return new OPCSink(0, 0, url.hostname, port);
+                        }
+                    }
+                    catch (e) {
+                        if (e.code == 'ERR_INVALID_URL') {
+                            // silently drop
+                        }
+                        else {
+                            console.error(e);
+                        }
                     }
                 }
                 return null;
