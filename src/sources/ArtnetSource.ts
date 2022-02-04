@@ -1,6 +1,8 @@
 import { BaseSource } from "./BaseSource";
 
 import * as dgram from "dgram";
+import { start } from "repl";
+import { Frame } from "../common/frame.interface";
 
 const artnetPort = 6454;
 
@@ -19,7 +21,7 @@ export class ArtnetSource extends BaseSource {
     private frameBuf: Frame;
     private sendBufferTimeout: NodeJS.Timeout;
 
-    constructor(width: number, height: number, newFrameCallback: (frame: Frame) => void) {
+    constructor(width: number, height: number, newFrameCallback: (frame: Frame) => void, private port: number = artnetPort, private startUniverse: number = 1) {
         super(width, height, newFrameCallback);
         this.frameBuf = { width: width, height: height, buffer: Buffer.alloc(width * height * 3) };
         this.open();
@@ -55,7 +57,7 @@ export class ArtnetSource extends BaseSource {
     private async handleArtnetPacket(pkg: ArtnetPacket, fromIp: string) {
         if (pkg) {
             // currently Art-Net packets are expected to start at universe 1 and be 510 channels in length
-            let offset = (pkg.universe - 1) * 510;
+            let offset = (pkg.universe - this.startUniverse) * 510;
             if(offset < 0) {
                 offset = 0;
             }
@@ -74,8 +76,8 @@ export class ArtnetSource extends BaseSource {
     }
 
     open() {
-        this.server = dgram.createSocket('udp4');
-        this.server.bind(artnetPort);
+        this.server = dgram.createSocket({type: 'udp4', reuseAddr: true});
+        this.server.bind(this.port);
         this.server.on('listening', () => {
             let addr = this.server.address();
             console.log(`[Art-Net] Server listening on ${addr.address}:${addr.port}`);

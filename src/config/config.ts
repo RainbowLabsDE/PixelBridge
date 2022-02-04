@@ -10,6 +10,9 @@ export interface ConfigStructure {
         },
         modules: {host: string, port: number}[];
     }
+    nodeEditor: {
+        editorState: any
+    }
 }
 
 const configDefaults: ConfigStructure = {
@@ -22,6 +25,9 @@ const configDefaults: ConfigStructure = {
             y: 0
         },
         modules: []
+    },
+    nodeEditor: {
+        editorState: {}
     }
 }
 

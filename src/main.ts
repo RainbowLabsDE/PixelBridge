@@ -7,23 +7,23 @@ import { GifSource } from "./sources/GifSource";
 import { config } from './config/config';
 import { WebServer } from "./webinterface/server";
 
-let panelsX = 6;
-let panelsY = 4;
-let frameWidth = panelsX * 16;
-let frameHeight = panelsY * 16;
+// let panelsX = 6;
+// let panelsY = 4;
+// let frameWidth = panelsX * 16;
+// let frameHeight = panelsY * 16;
 
-let opcSinks: OPCSink[] = [];
+// let opcSinks: OPCSink[] = [];
 
-for (let i = 0; i < panelsX * panelsY; i++) {
+// for (let i = 0; i < panelsX * panelsY; i++) {
     // opcSinks.push(new OPCSink(16, 16, '192.168.13.63', 7890+i));
-    opcSinks.push(new OPCSink(16, 16, '127.0.0.1', 7890 + i));
-}
+//     opcSinks.push(new OPCSink(16, 16, '127.0.0.1', 7890 + i));
+// }
 
-let modLedConverter = new ModLedConverter(panelsX, panelsY, 16, 16, opcSinks);
+// let modLedConverter = new ModLedConverter(panelsX, panelsY, 16, 16, opcSinks);
 // let dummySource = new DummySource(frameWidth, frameHeight, (frame) => {modLedConverter.sendFrame(frame)});
 
 
-let file = "tthl.gif"
+// let file = "tthl.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catNail.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/bongo1.gif"
 // let file = "C:/Users/Leandro/Nextcloud/Sync/Projekte/_littleBits/pixelFlut/gifFlut/catPC.gif"
@@ -36,7 +36,7 @@ let file = "tthl.gif"
 // let gifSource = new GifSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
 // gifSource.showGif(file);
 
-let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
+// let artnetSource = new ArtnetSource(frameWidth, frameHeight, (frame) => modLedConverter.sendFrame(frame));
 
 let server = new WebServer;
 

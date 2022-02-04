@@ -1,3 +1,4 @@
+import { Frame } from "../common/frame.interface";
 import { BaseSink } from "../sinks/BaseSink";
 
 export class ModLedConverter {

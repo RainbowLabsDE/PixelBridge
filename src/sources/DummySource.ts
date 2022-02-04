@@ -1,3 +1,4 @@
+import { Frame } from "../common/frame.interface";
 import {BaseSource} from "./BaseSource";
 
 export class DummySource extends BaseSource {
