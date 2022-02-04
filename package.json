@@ -19,7 +19,7 @@
     "rete-task-plugin": "^0.3.0",
     "rete-vue-render-plugin": "^0.5.0",
     "serialport": "^9.2.8",
-    "sharp": "^0.26.3",
+    "sharp": "^0.23.4",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2"
@@ -46,7 +46,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "scripts": {
-    "start": "npm run build && node dist/main.js",
+    "start": "node dist/main.js",
     "dev": "concurrently --kill-others \"npm run devBackend\" \"npm run devWebsite\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "copyFiles": "copyfiles -u 3 src/webinterface/frontend/dist/** dist/webinterface/frontend",

@@ -14,7 +14,7 @@ import { BackendInstanceManager } from "../common/backendInstanceManager";
 import { PixelMapComponentWorker } from "../common/worker/pixelMapComponentWorker";
 import { OPCMultiOutputComponentWorker } from "../common/worker/opcMultiOutputComponentWorker";
 import { Tpm2NetInputComponentWorker } from "../common/worker/tpm2NetInputComponentWorker";
-import { SerialOutputComponentWorker } from "../common/worker/SerialOutputComponentWorker";
+import { SerialOutputComponentWorker } from "../common/worker/serialOutputComponentWorker";
 import { FrameLimiterComponentWorker } from "../common/worker/frameLimiterComponentWorker";
 
 

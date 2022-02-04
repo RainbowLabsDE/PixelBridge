@@ -6,7 +6,7 @@ It's targeted to do the image data conversion for the [modLED project](https://g
 
 
 ## How to run
-Run with `npm start` (don't forget to run `npm i` the first time).
+Run with `npm start` (don't forget to run `npm i` and `npm run build` the first time).
 
 ## Development
 Develop with `npm run dev`. Then access http://localhost:8081 for the development frontend. (Port 8080 will still host the outdated release frontend)
