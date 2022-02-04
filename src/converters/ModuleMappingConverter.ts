@@ -20,8 +20,23 @@ export class ModuleMappingConverter {
 
         // reorder the frames
         let tempFrames = [...frameArr.frames];  // clone array, but leave object references intact
-        mapping.forEach((mapPos, i) => {
-            frameArr.frames[i] = tempFrames[mapPos];
+        mapping.forEach((mapping, i) => {
+            frameArr.frames[i] = tempFrames[mapping.position];
+
+            // rotate frame by 180° if needed
+            if (mapping.flipped) {
+                let frame = frameArr.frames[i];
+                let tempBuf = Buffer.from(frame.buffer);
+                for (let y = 0; y < frame.height; y++) {
+                    for (let x = 0; x < frame.width; x++) {
+                        let flippedX = frame.width - x - 1;
+                        let flippedY = frame.height - y - 1;
+                        let toPos = flippedY * frame.width + flippedX;
+                        let fromPos = y * frame.width + x;
+                        tempBuf.copy(frame.buffer, toPos * 3, fromPos * 3, (fromPos + 1) * 3);
+                    }
+                }
+            }
         });
 
         // debug mapping

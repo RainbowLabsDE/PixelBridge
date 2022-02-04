@@ -21,7 +21,7 @@ export class PixelMappingConverter {
         frameArr.frames.forEach(frame => {
             let tempBuf = Buffer.from(frame.buffer);
             for (let i = 0; i < frame.width * frame.height; i++) {
-                tempBuf.copy(frame.buffer, mapping[i] * 3, i * 3, (i * 3) + 3);
+                tempBuf.copy(frame.buffer, mapping[i].position * 3, i * 3, (i * 3) + 3);
             }
         });
 

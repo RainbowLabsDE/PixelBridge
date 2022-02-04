@@ -12,12 +12,17 @@ export interface MappingParams {
     mapStart: MapStart;
 }
 
+export interface MappingEntry {
+    position: number;
+    flipped: boolean;
+}
+
 export class MappingGenerator {
 
     constructor(protected mappingParams: MappingParams) { }
 
     // TODO: implement rotation of frames
-    async generateMapping(frameWidth: number, frameHeight: number): Promise<number[]> { 
+    async generateMapping(frameWidth: number, frameHeight: number): Promise<MappingEntry[]> { 
         const snake = this.mappingParams.mapType == 'snake';
         const vertical = this.mappingParams.mapOrientation == 'vert';
         const startingLeft = this.mappingParams.mapStart == 'tl' || this.mappingParams.mapStart == 'bl';
@@ -25,15 +30,16 @@ export class MappingGenerator {
 
         // ‧͙⁺˚* Magic, do not touch! *˚⁺‧͙
         
-        // for vertical orientation, invert the meaning of X and Y
+        // for vertical orientation, the meaning of X and Y is swapped
         const width = vertical ? frameHeight : frameWidth;
         const height = vertical ? frameWidth : frameHeight;
 
-        let mapping = [];
+        let mapping: MappingEntry[] = [];
         for (let i = 0; i < width * height; i++) {
             let x: number, y: number;
 
-            // for vertical orientation, invert the meaning of X and Y
+            // for vertical orientation, the meaning of X and Y is swapped
+            // booleans related if the 
             let flipX = vertical ? !startingTop : !startingLeft;
             let flipY = vertical ? !startingLeft : !startingTop;
 
@@ -56,13 +62,18 @@ export class MappingGenerator {
                 x = width - (i % width) - 1;
                 
             let newPos: number;
-            // for vertical orientation, invert the meaning of X and Y
+            // for vertical orientation, the meaning of X and Y is swapped
             if (!vertical)
                 newPos = y * width + x;
             else
                 newPos = x * height + y;
 
-            mapping[newPos] = i;
+            let flipModule = false;
+            if (this.mappingParams.mapFlip && this.mappingParams.mapFlip != 'none') {
+                flipModule = (y % 2 == 0) != (this.mappingParams.mapFlip == 'even');
+            }
+
+            mapping[newPos] = { position: i, flipped: flipModule };
         }
         return mapping;
     }
