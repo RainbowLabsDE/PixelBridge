@@ -23,6 +23,7 @@ import Vue from "vue";
 import { Tpm2NetInputComponent } from "./components/tpm2NetInputComponent";
 import { OpcInputComponent } from "./components/opcInputComponent";
 import { SerialOutputComponent } from "./components/serialOutputComponent";
+import { FrameLimiterComponent } from "./components/frameLimiterComponent";
 
 // in dev mode, UI is hosted on different port, could probably be solved more elegant
 const apiUrl = Vue.config.devtools ? `http://${window.location.hostname}:8080/api/nodeEditor` : '/api/nodeEditor';
@@ -68,6 +69,7 @@ export default async function (container: HTMLElement) {
         new OpcInputComponent(),
         new Tpm2NetInputComponent(),
         new MultiplexerComponent(),
+        new FrameLimiterComponent(),
         new FrameMapComponent(),
         new PixelMapComponent(),
         new SplitComponent(),

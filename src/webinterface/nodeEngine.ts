@@ -15,6 +15,7 @@ import { PixelMapComponentWorker } from "../common/worker/pixelMapComponentWorke
 import { OPCMultiOutputComponentWorker } from "../common/worker/opcMultiOutputComponentWorker";
 import { Tpm2NetInputComponentWorker } from "../common/worker/tpm2NetInputComponentWorker";
 import { SerialOutputComponentWorker } from "../common/worker/SerialOutputComponentWorker";
+import { FrameLimiterComponentWorker } from "../common/worker/frameLimiterComponentWorker";
 
 
 export class NodeEngine {
@@ -34,6 +35,7 @@ export class NodeEngine {
             new OPCMultiOutputComponentWorker(this.instMgr),
             new Tpm2NetInputComponentWorker(this.instMgr),
             new SerialOutputComponentWorker(this.instMgr),
+            new FrameLimiterComponentWorker(this.instMgr),
         ];
         this.engine = new Rete.Engine('pixelbridge@1.0.0');
         this.engine.use(TaskPlugin);

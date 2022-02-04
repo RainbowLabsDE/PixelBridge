@@ -1,10 +1,23 @@
 <template>
-<input type="number" :readonly="readonly" :value="value" :placeholder="ikey" @input="change($event)" @dblclick.stop="" @pointerdown.stop="" @pointermove.stop="" @wheel.stop=""/>
+  <input
+    type="number"
+    :readonly="readonly"
+    :value="value"
+    :placeholder="ikey"
+    :min="min"
+    :max="max"
+    :step="step"
+    @input="change($event)"
+    @dblclick.stop=""
+    @pointerdown.stop=""
+    @pointermove.stop=""
+    @wheel.stop=""
+  />
 </template>
 
 <script>
 export default {
-  props: ["readonly", "emitter", "ikey", "onChange", "getData", "putData"],
+  props: ["readonly", "emitter", "ikey", "onChange", "getData", "putData", "min", "max", "step"],
 
   data() {
     return {
