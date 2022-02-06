@@ -21,7 +21,9 @@ export class SerialOutputComponent extends Rete.Component {
         node.addInput(baudIn);
         node.addInput(pixelIn);
 
-        baudIn.control.putData('serialBaudrate', 115200);
+        if (baudIn.control.getData('serialBaudrate') === undefined) {
+            baudIn.control.putData('serialBaudrate', 115200);
+        }
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

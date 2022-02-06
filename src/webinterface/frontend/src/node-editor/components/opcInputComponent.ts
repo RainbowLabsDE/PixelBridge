@@ -21,7 +21,9 @@ export class OpcInputComponent extends Rete.Component {
         node.addInput(portIn);
         node.addOutput(frameOut);
 
-        portIn.control.putData('port', 7890);
+        if (portIn.control.getData('port') === undefined) {
+            portIn.control.putData('port', 7890);
+        }
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

@@ -24,8 +24,13 @@ export class ArtnetInputComponent extends Rete.Component {
         node.addInput(universeIn);
         node.addOutput(frameOut);
 
-        portIn.control.putData('port', 6454);
-        universeIn.control.putData('startUniverse', 1);
+        if (portIn.control.getData('port') === undefined) {
+            portIn.control.putData('port', 6454);
+        }
+        if (universeIn.control.getData('startUniverse') === undefined) {
+            universeIn.control.putData('startUniverse', 1);
+
+        }
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {

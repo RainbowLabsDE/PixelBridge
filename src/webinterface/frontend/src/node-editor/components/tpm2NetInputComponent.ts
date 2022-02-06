@@ -21,7 +21,9 @@ export class Tpm2NetInputComponent extends Rete.Component {
         node.addInput(portIn);
         node.addOutput(frameOut);
 
-        portIn.control.putData('port', 65506);
+        if (portIn.control.getData('port') === undefined) {
+            portIn.control.putData('port', 65506);
+        } 
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
