@@ -7,9 +7,10 @@ import { BaseSink } from "./BaseSink";
 export class SerialSink extends BaseSink {
     port: SerialPort;
     currentlyTransmitting: boolean = false;
+    lastTransmit: number = 0;   // ms
 
     // width & height not actually needed
-    constructor(width: number, height: number, protected portName: string, protected baudrate: number) {
+    constructor(width: number, height: number, protected portName: string, protected baudrate: number, protected minDelay: number = 0) {
         super(width, height);
         setTimeout(() => this.initConnection(), 200); // try to circumvent race condition of port not closing fast enough on baudrate change
     }
@@ -40,15 +41,15 @@ export class SerialSink extends BaseSink {
 
     async sendFrame(frame: Frame): Promise<void> {
         if (this.port?.isOpen) {
-            if (this.currentlyTransmitting) {
+            if (this.currentlyTransmitting || Date.now() - this.lastTransmit < this.minDelay) {
                 console.log(`[Serial] Warning! Dropping frame. Previous write still in progress. Reduce framerate or increase baudrate.`);
                 return;
             }
 
             this.currentlyTransmitting = true;
-
             this.port.write(frame.buffer, (err, bytesWritten) => {
                 this.currentlyTransmitting = false;
+                this.lastTransmit = Date.now();
                 if (err) {
                     console.log(`[Serial] Unhandled error during write:`, err);
                 }
