@@ -13,12 +13,15 @@ export class SerialOutputComponent extends Rete.Component {
         const pixelIn = new Rete.Input('rawPixIn', "RawPixels[]", RawPixelArrSocket);
         const portIn = new Rete.Input('serPort', "Serial Port", TextSocket);
         const baudIn = new Rete.Input('serBaud', "Serial Baudrate", NumSocket);
+        const minDelayIn = new Rete.Input('minDelay', "Minimum Delay Between Packets", NumSocket);
 
         portIn.addControl(new TextControl(this.editor, 'serialPort'));
         baudIn.addControl(new NumControl(this.editor, 'serialBaudrate'));
+        minDelayIn.addControl(new NumControl(this.editor, 'minimumDelay'));
 
         node.addInput(portIn);
         node.addInput(baudIn);
+        node.addInput(minDelayIn);
         node.addInput(pixelIn);
 
         if (baudIn.control.getData('serialBaudrate') === undefined) {

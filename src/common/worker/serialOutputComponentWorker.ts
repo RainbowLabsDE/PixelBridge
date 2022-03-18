@@ -10,6 +10,7 @@ import { Frame } from "../frame.interface";
 interface SerialOutParams {
     serialPort: string;
     baudrate: number;
+    minDelay: number;
 }
 
 // currently simply concatenates incoming frame segments, not sure what else to do rn
@@ -37,16 +38,17 @@ export class SerialOutputComponentWorker extends Rete.Component {
         // get node parameters
         const params: SerialOutParams = {
             serialPort: node.data.serialPort as string,
-            baudrate: node.data.serialBaudrate as number
+            baudrate: node.data.serialBaudrate as number,
+            minDelay: node.data.minimumDelay as number
         };
 
         // check for undefined parameters
-        if (params.serialPort == undefined || params.baudrate == undefined) {
+        if (params.serialPort == undefined || params.baudrate == undefined || params.minDelay == undefined) {
             return;
         }
 
         this.instMgr.createOrReconfigureInstance(node, params, () =>
-            new SerialSink(0, 0, params.serialPort, params.baudrate)
+            new SerialSink(0, 0, params.serialPort, params.baudrate, params.minDelay)
         );
     }
 
