@@ -39,6 +39,14 @@ export class SerialSink extends BaseSink {
         }
     }
 
+    portWriteAsync(port: SerialPort, data: string | number[] | Buffer) {
+        return new Promise<number>((resolve, reject) => { port.write(data, (err, bytesWritten) => { err ? reject(err) : resolve(bytesWritten) }) });
+    }
+
+    portDrainAsync(port: SerialPort) {
+        return new Promise<void>((resolve, reject) => { port.drain((err) => { err ? reject(err) : resolve() }) });
+    }
+
     async sendFrame(frame: Frame): Promise<void> {
         if (this.port?.isOpen) {
             if (this.currentlyTransmitting || Date.now() - this.lastTransmit < this.minDelay) {
@@ -47,15 +55,16 @@ export class SerialSink extends BaseSink {
             }
 
             this.currentlyTransmitting = true;
-            this.port.write(frame.buffer, (err, bytesWritten) => {
+
+            try {
+                await this.portWriteAsync(this.port, frame.buffer);
+                await this.portDrainAsync(this.port);
                 this.currentlyTransmitting = false;
                 this.lastTransmit = Date.now();
-                if (err) {
-                    console.log(`[Serial] Unhandled error during write:`, err);
-                }
-            });
-
+            }
+            catch (e) {
+                console.log(`[Serial] Unhandled error during write:`, e);
+            }
         }
-
     }
 }
