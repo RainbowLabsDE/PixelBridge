@@ -24,6 +24,7 @@ import { Tpm2NetInputComponent } from "./components/tpm2NetInputComponent";
 import { OpcInputComponent } from "./components/opcInputComponent";
 import { SerialOutputComponent } from "./components/serialOutputComponent";
 import { FrameLimiterComponent } from "./components/frameLimiterComponent";
+import { WmUdpMultiOutputComponent } from "./components/wmUdpMultiOutputComponent";
 
 // in dev mode, UI is hosted on different port, could probably be solved more elegant
 const apiUrl = Vue.config.devtools ? `http://${window.location.hostname}:8080/api/nodeEditor` : '/api/nodeEditor';
@@ -75,6 +76,7 @@ export default async function (container: HTMLElement) {
         new SplitComponent(),
         new OPCMultiOutputComponent(),
         new SerialOutputComponent(),
+        new WmUdpMultiOutputComponent(),
     ];
 
     const editor = new Rete.NodeEditor("pixelbridge@1.0.0", container);
