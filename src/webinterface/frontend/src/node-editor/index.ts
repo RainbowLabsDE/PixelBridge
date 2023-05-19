@@ -25,6 +25,7 @@ import { OpcInputComponent } from "./components/opcInputComponent";
 import { SerialOutputComponent } from "./components/serialOutputComponent";
 import { FrameLimiterComponent } from "./components/frameLimiterComponent";
 import { WmUdpMultiOutputComponent } from "./components/wmUdpMultiOutputComponent";
+import { GammaComponent } from "./components/gammaComponent";
 
 // in dev mode, UI is hosted on different port, could probably be solved more elegant
 const apiUrl = Vue.config.devtools ? `http://${window.location.hostname}:8080/api/nodeEditor` : '/api/nodeEditor';
@@ -62,18 +63,24 @@ const saveEditorState = async (editorJson: string): Promise<any> => {
 
 export default async function (container: HTMLElement) {
     const components: Component[] = [
+        // Variables
         new NumComponent(),
         new AddComponent(),
         new ResolutionComponent(),
+        // Inputs
         new ArtnetInputComponent(),
         new GifInputComponent(),
         new OpcInputComponent(),
         new Tpm2NetInputComponent(),
         new MultiplexerComponent(),
+        // Modifiers
         new FrameLimiterComponent(),
+        new GammaComponent(),
+        // Mapping
         new FrameMapComponent(),
         new PixelMapComponent(),
         new SplitComponent(),
+        // Outputs
         new OPCMultiOutputComponent(),
         new SerialOutputComponent(),
         new WmUdpMultiOutputComponent(),

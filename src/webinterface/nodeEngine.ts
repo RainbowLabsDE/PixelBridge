@@ -17,6 +17,7 @@ import { Tpm2NetInputComponentWorker } from "../common/worker/tpm2NetInputCompon
 import { SerialOutputComponentWorker } from "../common/worker/serialOutputComponentWorker";
 import { FrameLimiterComponentWorker } from "../common/worker/frameLimiterComponentWorker";
 import { WmUDPMultiOutputComponentWorker } from "../common/worker/wmUdpMultiOutputComponentWorker";
+import { GammaComponentWorker } from "../common/worker/gammaComponentWorker";
 
 
 export class NodeEngine {
@@ -38,6 +39,7 @@ export class NodeEngine {
             new SerialOutputComponentWorker(this.instMgr),
             new FrameLimiterComponentWorker(this.instMgr),
             new WmUDPMultiOutputComponentWorker(this.instMgr),
+            new GammaComponentWorker(this.instMgr),
         ];
         this.engine = new Rete.Engine('pixelbridge@1.0.0');
         this.engine.use(TaskPlugin);
