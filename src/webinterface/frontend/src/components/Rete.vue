@@ -21,7 +21,7 @@ export default {
 <style>
 #rete {
   width: 100%;
-  height: 1000px;
+  height: 100vh;
 }
 .node .control input, .node .input-control input {
   width: 140px;

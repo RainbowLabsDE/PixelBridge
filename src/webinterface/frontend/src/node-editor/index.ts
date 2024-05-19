@@ -9,6 +9,7 @@ import MinimapPlugin from "rete-minimap-plugin";
 import HistoryPlugin from 'rete-history-plugin';
 import CommentPlugin from 'rete-comment-plugin';
 import TaskPlugin from 'rete-task-plugin';
+import AutoArrangePlugin from 'rete-auto-arrange-plugin';
 import { NumComponent } from "./components/numComponent";
 import { AddComponent } from "./components/addComponent";
 import { ArtnetInputComponent } from "./components/artnetInputComponent";
@@ -61,6 +62,23 @@ const saveEditorState = async (editorJson: string): Promise<any> => {
     saveTimeout = setTimeout(postEditorState, 500, editorJson);
 }
 
+const getHostname = async (): Promise<any> => {
+    try {
+        const response = await fetch(`${apiUrl}/hostname`);
+        const resJson = await response.json();
+        // console.log(resJson);
+        if (resJson.hostname && !document.title.startsWith('[')) {
+            document.title = `[${resJson.hostname}] ${document.title}`;
+        }
+        return resJson.hostname;
+    }
+    catch (e) {
+        return {};
+    }
+}
+
+declare const window: any;
+
 export default async function (container: HTMLElement) {
     const components: Component[] = [
         // Variables
@@ -95,6 +113,7 @@ export default async function (container: HTMLElement) {
     editor.use(MinimapPlugin);
     editor.use(HistoryPlugin, { keyboard: true });
     editor.use(CommentPlugin, { margin: 20 });
+    editor.use(AutoArrangePlugin, { margin: { x: 50, y: 50 }, depth: 0 });
     // editor.use(TaskPlugin);
 
     const engine = new Rete.Engine("pixelbridge@1.0.0");
@@ -118,6 +137,12 @@ export default async function (container: HTMLElement) {
     });
 
     editor.view.resize();
-    AreaPlugin.zoomAt(editor);
     editor.trigger("process");
+    AreaPlugin.zoomAt(editor, editor.nodes);
+
+    // hacky hacky
+    window.editor = editor;
+    window.editor.areaPlugin = AreaPlugin;
+    // window.editor.apiUrl = apiUrl;
+    await getHostname();
 }

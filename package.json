@@ -18,6 +18,7 @@
     "rete-minimap-plugin": "^0.3.1",
     "rete-task-plugin": "^0.3.0",
     "rete-vue-render-plugin": "^0.5.0",
+    "rete-auto-arrange-plugin" : "^0.5.0-rc.1",
     "serialport": "10.0.0",
     "sharp": "^0.33.4",
     "vue": "^2.6.11",

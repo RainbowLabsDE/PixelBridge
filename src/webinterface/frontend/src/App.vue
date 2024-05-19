@@ -1,15 +1,18 @@
 <template>
   <div id="app">
-    <Rete/>
+    <TitleBar />
+    <Rete />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Rete from './components/Rete.vue'
+import TitleBar from './TitleBar.vue'
 @Component({
   components: {
-    Rete
+    Rete,
+    TitleBar
   },
 })
 export default class App extends Vue {}
@@ -17,5 +20,12 @@ export default class App extends Vue {}
 
 <style>
 #app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+body {
+  margin: 0;
 }
 </style>

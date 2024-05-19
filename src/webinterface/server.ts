@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as cors from 'cors';
 import { config } from '../config/config';
 import { NodeEngine } from './nodeEngine';
+import { hostname } from 'os';
 
 
 export class WebServer {
@@ -33,6 +34,9 @@ export class WebServer {
             .get(this.getEditorState)
             .post(this.postEditorState)
 
+        this.app.route('/api/nodeEditor/hostname')
+            .get(this.getHostname)
+
         this.app.listen(config.web.port, '0.0.0.0', () => {
             console.log(`[Web] Server started at http://localhost:${config.web.port}`);
         });
@@ -52,6 +56,10 @@ export class WebServer {
 
     getEditorState(req: express.Request, res: express.Response) {
         res.json(config.nodeEditor.editorState);
+    }
+    
+    getHostname(req: express.Request, res: express.Response) {
+        res.json({hostname: hostname()});
     }
 
     postEditorState = (req: express.Request, res: express.Response) => {
