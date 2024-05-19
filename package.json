@@ -18,8 +18,8 @@
     "rete-minimap-plugin": "^0.3.1",
     "rete-task-plugin": "^0.3.0",
     "rete-vue-render-plugin": "^0.5.0",
-    "serialport": "^9.2.8",
-    "sharp": "^0.23.4",
+    "serialport": "10.0.0",
+    "sharp": "^0.33.4",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2"

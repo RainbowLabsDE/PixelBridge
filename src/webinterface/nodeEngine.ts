@@ -30,7 +30,7 @@ export class NodeEngine {
             new SplitComponentWorker(this.instMgr),
             new ResolutionComponentWorker(),
             new NumComponentWorker(),
-            new GifInputComponentWorker(),
+            new GifInputComponentWorker(this.instMgr),
             new MultiplexerComponentWorker(),
             new FrameMapComponentWorker(this.instMgr),
             new PixelMapComponentWorker(this.instMgr),

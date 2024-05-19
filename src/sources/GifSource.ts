@@ -8,8 +8,11 @@ export class GifSource extends BaseSource {
     private gifFrameIdx: number;
     private gifInterval: NodeJS.Timeout;
 
-    constructor(width: number, height: number, newFrameCallback: (frame: Frame) => void) {
+    constructor(width: number, height: number, newFrameCallback: (frame: Frame) => void, path: string = undefined) {
         super(width, height, newFrameCallback);
+        if (path) {
+            this.showGif(path);
+        }
     }
 
     private showGifTick() {
@@ -101,5 +104,9 @@ export class GifSource extends BaseSource {
             this.showGifTick();
             this.gifInterval = setInterval(() => this.showGifTick(), frameDelay);
         }
+    }
+
+    async close() {
+        clearInterval(this.gifInterval);
     }
 }
