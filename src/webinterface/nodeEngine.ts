@@ -18,13 +18,15 @@ import { SerialOutputComponentWorker } from "../common/worker/serialOutputCompon
 import { FrameLimiterComponentWorker } from "../common/worker/frameLimiterComponentWorker";
 import { WmUDPMultiOutputComponentWorker } from "../common/worker/wmUdpMultiOutputComponentWorker";
 import { GammaComponentWorker } from "../common/worker/gammaComponentWorker";
+import { PreviewOutputComponentWorker } from "../common/worker/previewOutputComponentWorker";
+import { WebServer } from "./server";
 
 
 export class NodeEngine {
     engine: Rete.Engine;
     instMgr = new BackendInstanceManager();
 
-    constructor() {
+    constructor(protected webServer: WebServer) {
         const components: Rete.Component[] = [
             new ArtnetInputComponentWorker(this.instMgr),
             new SplitComponentWorker(this.instMgr),
@@ -40,6 +42,7 @@ export class NodeEngine {
             new FrameLimiterComponentWorker(this.instMgr),
             new WmUDPMultiOutputComponentWorker(this.instMgr),
             new GammaComponentWorker(this.instMgr),
+            new PreviewOutputComponentWorker(this.instMgr, webServer),
         ];
         this.engine = new Rete.Engine('pixelbridge@1.0.0');
         this.engine.use(TaskPlugin);
