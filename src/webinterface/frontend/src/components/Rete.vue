@@ -38,28 +38,52 @@ select, input {
 
 /* TODO: get rid of !importants */
 
+:root {
+  --color-frame: #bae1a8;
+  --color-framearr: #4c8a2f;
+  --color-rawpixelsarr: #21e9ce;
+  --color-number: #73A8DC;
+  --color-text: lightgrey;
+  --color-resolution: lightcoral;
+}
+
 .socket.frame {
-    background: #BAE1A8 !important;
+  background: var(--color-frame) !important;
 }
 
 .socket.framearr {
-  background: #4c8a2f !important;
+  background: var(--color-framearr) !important;
 }
 
 .socket.rawpixelsarr {
-  background: #21e9ce !important;
+  background: var(--color-rawpixelsarr) !important;
 }
 
 .socket.number {
-    background: #73A8DC !important;
+  background: var(--color-number) !important;
 }
 
 .socket.text {
-    background: lightgrey !important;
+  background: var(--color-text) !important;
 }
 
 .socket.resolution {
-    background: lightcoral !important;
+  background: var(--color-resolution) !important;
+}
+
+.socket.anyimage {
+  background: linear-gradient(
+    135deg,
+    var(--color-frame) 0, 
+    var(--color-frame)        37%, 
+    var(--color-framearr)     37%, 
+    var(--color-framearr)     63%, 
+    var(--color-rawpixelsarr) 63%
+  ) !important;
+}
+
+.node.preview-output {
+    min-width: 320px !important;
 }
 
 </style>

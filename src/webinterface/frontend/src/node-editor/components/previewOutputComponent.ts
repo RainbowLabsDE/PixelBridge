@@ -1,7 +1,7 @@
 import * as Rete from "rete";
 import { NodeData, WorkerInputs, WorkerOutputs } from "rete/types/core/data";
-import { FrameArraySocket, FrameSocket, RawPixelArrSocket, ResolutionSocket } from "../sockets/sockets";
-import { ResolutionControl } from "../controls/resolutionControl";
+import { AnyImageSocket, ResolutionSocket } from "../sockets/sockets";
+import { Resolution, ResolutionControl } from "../controls/resolutionControl";
 import { CanvasControl } from "../controls/canvasControl";
 
 interface PreviewFrameData {
@@ -17,6 +17,7 @@ interface PreviewFrameData {
 export class PreviewOutputComponent extends Rete.Component {
     private websocket: WebSocket;
     private registeredNodes: Rete.Node[] = [];
+    private targetRes: Resolution;
 
     constructor() {
         super("Preview Output");
@@ -68,12 +69,40 @@ export class PreviewOutputComponent extends Rete.Component {
                 if (node.id === data.nodeId) {
                     const canvas: HTMLCanvasElement = (node.controls.get('canvas') as any).props.canvasElement;
                     // draw frame
-                    console.log(node.data.resolution.x);
-                    canvas.width = data.frame.width;
-                    canvas.height = data.frame.height;
-                    const ctx = canvas.getContext('2d');
-                    const img = new ImageData(this.convertToRGBA(data.frame.buffer.data), data.frame.width, data.frame.height);
+                    // console.log(node, this.targetRes);
+
+                    let pixelData = this.convertToRGBA(data.frame.buffer.data);
+                    let res: Resolution = {x: data.frame.width, y: data.frame.height};  // default to resolution of incoming frame data
+
+                    if (this.targetRes?.x && this.targetRes?.y) {               // if both x+y values of optional resolution are set, use them
+                        res = this.targetRes;
+                    }
+                    else if (this.targetRes?.x === 0 && this.targetRes?.y) {    // if X is 0/blank, automatically calculate X
+                        res.y = this.targetRes.y;
+                        res.x = Math.ceil(pixelData.length / 4 / this.targetRes.y);
+                    }
+                    else if (this.targetRes?.x && this.targetRes?.y === 0) {    // if Y is 0/blank, automatically calculate Y
+                        res.x = this.targetRes.x;
+                        res.y = Math.ceil(pixelData.length / 4 / this.targetRes.x);
+                    }
+                    // TODO: don't calculate the resolution stuff above every frame, but only when targetRes changes?
+
+                    if (canvas.width != res.x || canvas.height != res.y) {      // if canvas resolution changed, update
+                        canvas.width = res.x;
+                        canvas.height = res.y;
+                        this.editor.view.updateConnections({node});
+                    }
+
+                    if (pixelData.length < res.x * res.y * 4) {         // append transparent pixels
+                        const filler = new Array<number>(res.x * res.y * 4 - pixelData.length).fill(0);
+                        pixelData = new Uint8ClampedArray([...pixelData, ...filler]);
+                    }
+                    else if (pixelData.length > res.x * res.y * 4) {    // truncate
+                        pixelData = pixelData.slice(0, res.x * res.y * 4);
+                    }
                     
+                    const img = new ImageData(pixelData, res.x, res.y);
+                    const ctx = canvas.getContext('2d');
                     ctx.putImageData(img, 0, 0);
                 }
             });
@@ -85,10 +114,6 @@ export class PreviewOutputComponent extends Rete.Component {
     }
 
     async builder(node: Rete.Node) {
-        const AnyImageSocket = new Rete.Socket('AnyImage');
-        FrameSocket.combineWith(AnyImageSocket);
-        FrameArraySocket.combineWith(AnyImageSocket);
-        RawPixelArrSocket.combineWith(AnyImageSocket);
 
         const imageIn = new Rete.Input('anyImage', "Any Image Data", AnyImageSocket);
         const resIn = new Rete.Input('res', "Optional Resolution", ResolutionSocket);
@@ -104,6 +129,9 @@ export class PreviewOutputComponent extends Rete.Component {
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
-        // do nothing for now
+        const res = inputs['res'].length ? (inputs['res'][0] as Resolution) : (node.data.resolution as Resolution);
+        if (res) {
+            this.targetRes = res;
+        }
     }
 }

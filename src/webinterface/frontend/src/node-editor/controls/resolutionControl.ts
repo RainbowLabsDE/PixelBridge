@@ -1,7 +1,7 @@
 import Rete, { NodeEditor } from "rete";
 import VueResolutionControl from "./resolutionControl.vue";
 
-class Resolution {
+export interface Resolution {
     x: number;
     y: number;
 }

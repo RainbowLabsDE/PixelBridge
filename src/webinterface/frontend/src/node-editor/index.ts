@@ -137,10 +137,15 @@ export default async function (container: HTMLElement) {
     editor.on(["process", "nodecreated", "noderemoved", "connectioncreated", "connectionremoved", "nodetranslated"], async () => {
         await saveEditorState(JSON.stringify(editor.toJSON()));
     });
+    editor.on(["connectioncreated", "connectionremoved"], async (connection) => {
+        if (connection.input.node) {
+            setTimeout(() => editor.view.updateConnections({node: connection.input.node}), 1);
+        }
+    });
 
     editor.view.resize();
     editor.trigger("process");
-    AreaPlugin.zoomAt(editor, editor.nodes);
+    setTimeout(() => AreaPlugin.zoomAt(editor, editor.nodes), 1);
 
     // hacky hacky
     window.editor = editor;

@@ -14,6 +14,6 @@ export class ResolutionComponent extends Rete.Component {
     }
 
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
-        // do nothing for now
+        outputs['res'] = node.data.resolution;
     }
 }

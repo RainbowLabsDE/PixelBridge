@@ -7,6 +7,7 @@ import { Frame } from "../frame.interface";
 import { WebServer } from "../../webinterface/server";
 import { Resolution } from "../resolution.interface";
 import { PreviewSink } from "../../sinks/PreviewSink";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 interface PreviewOutParams {
     resolution: Resolution;
@@ -49,14 +50,15 @@ export class PreviewOutputComponentWorker extends Rete.Component {
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
+        const upstreamNodeId = node.inputs.anyImage.connections[0]?.node;
         if (data === null) {
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
-        else if (this.component.instMgr.getInstance(node)?.instance && (data.frameArr?.frames || data.frame)) {
+        else if (this.component.instMgr.getInstance(node)?.instance && (data[upstreamNodeId]?.frameArr?.frames || data[upstreamNodeId]?.frame)) {
             let outFrame: Frame;
-            if (data.frameArr) {
-                const frameArr: FrameArr = data.frameArr;
+            if (data[upstreamNodeId].frameArr) {
+                const frameArr: FrameArr = data[upstreamNodeId].frameArr;
     
                 // concatenate module frames
                 const aggregatedBufSize = frameArr.frames.reduce((sum, frame) => (sum + frame.buffer.length), 0);
@@ -71,10 +73,9 @@ export class PreviewOutputComponentWorker extends Rete.Component {
                 });
                 outFrame = mergedFrame;
             }
-            else if(data.frame) {
-                outFrame = data.frame;
+            else if(data[upstreamNodeId].frame) {
+                outFrame = data[upstreamNodeId].frame;
             }
-
             // send out merged frame
             this.component.instMgr.getInstance(node).instance.sendFrame(outFrame);
         }

@@ -5,6 +5,7 @@ import { Resolution } from "../resolution.interface";
 import { ReteTask } from "../reteTask.interface";
 import { BackendInstanceManager, InstanceState } from "../backendInstanceManager";
 import { GifSource } from "../../sources/GifSource";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 interface GifInputParams {
     resolution: Resolution;
@@ -43,12 +44,12 @@ export class GifInputComponentWorker extends Rete.Component {
         }
 
         const task = this.task[node.id];
-
+        
         this.instMgr.createOrReconfigureInstance(node, nodeParams, () =>
             new GifSource(
                 nodeParams.resolution.x,
                 nodeParams.resolution.y,
-                (f: Frame) => { this.tasks[node.id].run({frame: f}); },
+                (f: Frame) => { this.tasks[node.id].run({frame: f, [node.id]: {frame: f}}); },
                 nodeParams.path )
         );
     }
@@ -58,7 +59,7 @@ export class GifInputComponentWorker extends Rete.Component {
     }
 
     // this is now a task worker
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
         
         if(data === null) {  // init
             this.closed = ['frame'];                    // stop propagating event
@@ -66,7 +67,6 @@ export class GifInputComponentWorker extends Rete.Component {
         }
         else {
             this.closed = [];
-            data.fromId = node.id;
         }
         // console.log("GifWorker", inputs, data);
     }
