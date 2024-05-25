@@ -17,7 +17,6 @@ interface PreviewFrameData {
 export class PreviewOutputComponent extends Rete.Component {
     private websocket: WebSocket;
     private registeredNodes: Rete.Node[] = [];
-    private targetRes: Resolution;
 
     constructor() {
         super("Preview Output");
@@ -73,17 +72,18 @@ export class PreviewOutputComponent extends Rete.Component {
 
                     let pixelData = this.convertToRGBA(data.frame.buffer.data);
                     let res: Resolution = {x: data.frame.width, y: data.frame.height};  // default to resolution of incoming frame data
+                    const targetRes = node.data.targetRes as Resolution;
 
-                    if (this.targetRes?.x && this.targetRes?.y) {               // if both x+y values of optional resolution are set, use them
-                        res = this.targetRes;
+                    if (targetRes?.x && targetRes?.y) {               // if both x+y values of optional resolution are set, use them
+                        res = targetRes;
                     }
-                    else if (this.targetRes?.x === 0 && this.targetRes?.y) {    // if X is 0/blank, automatically calculate X
-                        res.y = this.targetRes.y;
-                        res.x = Math.ceil(pixelData.length / 4 / this.targetRes.y);
+                    else if (targetRes?.x === 0 && targetRes?.y) {    // if X is 0/blank, automatically calculate X
+                        res.y = targetRes.y;
+                        res.x = Math.ceil(pixelData.length / 4 / targetRes.y);
                     }
-                    else if (this.targetRes?.x && this.targetRes?.y === 0) {    // if Y is 0/blank, automatically calculate Y
-                        res.x = this.targetRes.x;
-                        res.y = Math.ceil(pixelData.length / 4 / this.targetRes.x);
+                    else if (targetRes?.x && targetRes?.y === 0) {    // if Y is 0/blank, automatically calculate Y
+                        res.x = targetRes.x;
+                        res.y = Math.ceil(pixelData.length / 4 / targetRes.x);
                     }
                     // TODO: don't calculate the resolution stuff above every frame, but only when targetRes changes?
 
@@ -131,7 +131,7 @@ export class PreviewOutputComponent extends Rete.Component {
     worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs) {
         const res = inputs['res'].length ? (inputs['res'][0] as Resolution) : (node.data.resolution as Resolution);
         if (res) {
-            this.targetRes = res;
+            node.data.targetRes = res;
         }
     }
 }

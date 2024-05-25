@@ -14,11 +14,16 @@ export class GammaConverter {
 
     // returns null, if frame needs to be dropped
     async convert(frame: Frame): Promise<Frame> {
+        let newFrame: Frame = {
+            width: frame.width,
+            height: frame.height,
+            buffer: Buffer.alloc(frame.buffer.length),
+        }
         for (let i = 0; i < frame.height * frame.width * 3; i++) {
-            frame.buffer[i] = this.gammaLookup[frame.buffer[i]];
+            newFrame.buffer[i] = this.gammaLookup[frame.buffer[i]];
         }
 
-        return frame;
+        return newFrame;
     }
 
 }

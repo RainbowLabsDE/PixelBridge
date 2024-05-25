@@ -3,6 +3,7 @@ import { NodeData, WorkerInputs } from "rete/types/core/data";
 import { BackendInstanceManager } from "../backendInstanceManager";
 import { ReteTask } from "../reteTask.interface";
 import { OPCMultiSink } from "../../sinks/OPCMultiSink";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 interface OpcMultiOutParams {
     numAddresses: number;
@@ -54,12 +55,13 @@ export class OPCMultiOutputComponentWorker extends Rete.Component {
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
+        const upstreamNodeId = node.inputs.rawPixIn.connections[0]?.node;   // inputs.<key> must match input key in builder definition (see above)
         if (data === null) {
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
-        else if (this.component.instMgr.getInstance(node)?.instance && data.frameArr?.frames) {
-            this.component.instMgr.getInstance(node).instance.sendFrames(data.frameArr.frames);
+        else if (this.component.instMgr.getInstance(node)?.instance && data[upstreamNodeId].frameArr?.frames) {
+            this.component.instMgr.getInstance(node).instance.sendFrames(data[upstreamNodeId].frameArr.frames);
         }
 
     }

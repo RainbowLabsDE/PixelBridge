@@ -27,6 +27,7 @@ export class OPCMultiOutputComponent extends Rete.Component {
                 node.addControl(new TextControl(this.editor, 'address' + n));
             }
             node.update();
+            setTimeout(() => this.editor.view.updateConnections({node}), 1);
         }
 
         const pixelIn = new Rete.Input('rawPixIn', "RawPixels[]", RawPixelArrSocket);

@@ -49,7 +49,7 @@ export class GifInputComponentWorker extends Rete.Component {
             new GifSource(
                 nodeParams.resolution.x,
                 nodeParams.resolution.y,
-                (f: Frame) => { this.tasks[node.id].run({frame: f, [node.id]: {frame: f}}); },
+                (f: Frame) => { this.tasks[node.id].run({[node.id]: {frame: f}}); },
                 nodeParams.path )
         );
     }

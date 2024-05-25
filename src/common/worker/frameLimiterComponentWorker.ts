@@ -3,6 +3,7 @@ import { NodeData, WorkerInputs } from "rete/types/core/data";
 import { FrameLimiterConverter } from "../../converters/FrameLimiterConverter";
 import { BackendInstanceManager } from "../backendInstanceManager";
 import { ReteTask } from "../reteTask.interface";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 interface FrameLimiterComponentParams {
     fps: number;
@@ -46,22 +47,22 @@ export class FrameLimiterComponentWorker extends Rete.Component {
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
         // TODO: do parameter getting and precalculation only once during init
         if (data === null) {
             this.closed = ['frame'];                 // stop propagating event
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
         else if (this.component.instMgr.getInstance(node)?.instance) {
-            let frame = await this.component.instMgr.getInstance(node).instance.convert(data.frame);
+            const upstreamNodeId = node.inputs.frameIn.connections[0]?.node;   // inputs.<key> must match input key in builder definition (see above)
+            let frame = await this.component.instMgr.getInstance(node).instance.convert(data[upstreamNodeId]?.frame);
             if (frame !== null) {
                 this.closed = [];                       // enable propagating event again
-                data.fromId = node.id;
+                data[node.id] = {frame: frame};
             }
             else {
                 this.closed = ['frame'];             // stop propagating event
             }
-
         }
         else {
             this.closed = ['frame'];                 // stop propagating event

@@ -6,6 +6,7 @@ import { OPCSink } from "../../sinks/OPCSink";
 import { SerialSink } from "../../sinks/SerialSink";
 import { FrameArr } from "../frameArr.interface";
 import { Frame } from "../frame.interface";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 interface SerialOutParams {
     serialPort: string;
@@ -52,12 +53,13 @@ export class SerialOutputComponentWorker extends Rete.Component {
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
+        const upstreamNodeId = node.inputs.rawPixIn.connections[0]?.node;   // inputs.<key> must match input key in builder definition (see above)
         if (data === null) {
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
-        else if (this.component.instMgr.getInstance(node)?.instance && data.frameArr?.frames) {
-            const frameArr: FrameArr = data.frameArr;
+        else if (this.component.instMgr.getInstance(node)?.instance && data[upstreamNodeId].frameArr?.frames) {
+            const frameArr: FrameArr = data[upstreamNodeId].frameArr;
 
             // concatenate module frames
             const aggregatedBufSize = frameArr.frames.reduce((sum, frame) => (sum + frame.buffer.length), 0);

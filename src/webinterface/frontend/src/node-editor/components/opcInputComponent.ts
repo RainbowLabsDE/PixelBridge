@@ -6,7 +6,7 @@ import { FrameSocket, NumSocket, ResolutionSocket } from "../sockets/sockets";
 
 export class OpcInputComponent extends Rete.Component {
     constructor() {
-        super("OPC Input");
+        super("OPC Input [WIP!]");
     }
 
     async builder(node: Rete.Node) {

@@ -1,5 +1,6 @@
 import * as Rete from "rete";
 import { WorkerInputs } from "rete/types/core/data";
+import { WorkerPassthroughData } from "./workerPassthroughData.interface";
 
 export interface ReteTask {
     inputs: WorkerInputs;
@@ -14,7 +15,7 @@ export interface ReteTask {
 
     getInputs(type: string): string[];
     reset(): void;
-    run(data: any, needReset?: boolean, garbage?: any[], propagate?: boolean): any;    // returns outputData from called worker
+    run(data: WorkerPassthroughData, needReset?: boolean, garbage?: any[], propagate?: boolean): any;    // returns outputData from called worker
     clone(root: boolean, oldTask: ReteTask, newTask: ReteTask): ReteTask;
 
 }

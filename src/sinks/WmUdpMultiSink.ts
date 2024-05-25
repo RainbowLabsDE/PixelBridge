@@ -53,7 +53,9 @@ export class WmUdpMultiSink {
     close() {
         console.log("Close WM UDP Sink");
         this.open = false;
-        this.udp.close();
+        if (this.udp) {
+            this.udp.close();
+        }
     }
 
     async sendFrame(frame: Frame, mac: Buffer): Promise<void> {

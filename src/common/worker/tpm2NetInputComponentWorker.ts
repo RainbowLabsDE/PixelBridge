@@ -7,6 +7,7 @@ import { BackendInstanceManager, InstanceState } from "../backendInstanceManager
 import { Frame } from "../frame.interface";
 import { Resolution } from "../resolution.interface";
 import { ReteTask } from "../reteTask.interface";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 interface Tpm2NetInputParams {
     port: number;
@@ -49,19 +50,18 @@ export class Tpm2NetInputComponentWorker extends Rete.Component {
             new Tpm2NetSource(
                 nodeParams.resolution.x, 
                 nodeParams.resolution.y, 
-                (f: Frame) => { this.tasks[node.id].run({frame: f}); }, 
+                (f: Frame) => { this.tasks[node.id].run({[node.id]: {frame: f}}); }, 
                 nodeParams.port)
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
         if (data === null) {
             this.closed = ['frame'];                    // stop propagating event
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         } 
         else {
             this.closed = [];   // enable propagating event again
-            data.fromId = node.id;
             // don't have to do more, frame data is already contained in data (called from Source frame callback)
         }
     }

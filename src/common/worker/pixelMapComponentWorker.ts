@@ -4,6 +4,7 @@ import { MapOrientation, MappingParams, MapStart, MapType } from "../MappingGene
 import { BackendInstanceManager } from "../backendInstanceManager";
 import { ReteTask } from "../reteTask.interface";
 import { PixelMappingConverter } from "../../converters/PixelMappingConverter";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 
 export class PixelMapComponentWorker extends Rete.Component {
@@ -45,15 +46,15 @@ export class PixelMapComponentWorker extends Rete.Component {
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
         if (data === null) {
             this.closed = ['pixelArrOut'];              // stop propagating event
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
         else if (this.component.instMgr.getInstance(node)?.instance) {
             this.closed = [];                           // enable propagating event again
-            data.fromId = node.id;
-            data.frameArr = await this.component.instMgr.getInstance(node).instance.convert(data.frameArr);
+            const upstreamNodeId = node.inputs.frameArrIn.connections[0]?.node;   // inputs.<key> must match input key in builder definition (see above)
+            data[node.id] = {frameArr: await this.component.instMgr.getInstance(node).instance.convert(data[upstreamNodeId].frameArr)};
         }
         else {
             this.closed = ['pixelArrOut'];              // stop propagating event

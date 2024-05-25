@@ -3,6 +3,7 @@ import { NodeData, WorkerInputs } from "rete/types/core/data";
 import { GammaConverter } from "../../converters/GammaConverter";
 import { BackendInstanceManager } from "../backendInstanceManager";
 import { ReteTask } from "../reteTask.interface";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 interface GammaComponentParams {
     gamma: number;
@@ -46,7 +47,7 @@ export class GammaComponentWorker extends Rete.Component {
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
         // TODO: do parameter getting and precalculation only once during init
         if (data === null) {
             this.closed = ['frame'];                 // stop propagating event
@@ -54,8 +55,14 @@ export class GammaComponentWorker extends Rete.Component {
         }
         else if (this.component.instMgr.getInstance(node)?.instance) {
             this.closed = [];                       // enable propagating event again
-            data.fromId = node.id;
-            data.frame = await this.component.instMgr.getInstance(node).instance.convert(data.frame); // probably not really needed as I overwrite the buffer directly anyways, currently
+            const upstreamNodeId = node.inputs.frameIn.connections[0]?.node;   // inputs.<key> must match input key in builder definition (see above)
+            try {
+                data[node.id] = {frame: await this.component.instMgr.getInstance(node).instance.convert(data[upstreamNodeId].frame)};
+            }
+            catch (e) {
+                this.closed = ['frame'];
+                console.log(e);
+            }
         }
         else {
             this.closed = ['frame'];                 // stop propagating event

@@ -4,6 +4,7 @@ import { ModuleMappingConverter } from "../../converters/ModuleMappingConverter"
 import { BackendInstanceManager } from "../backendInstanceManager";
 import { MapFlip, MapOrientation, MappingParams, MapStart, MapType } from "../MappingGenerator";
 import { ReteTask } from "../reteTask.interface";
+import { WorkerPassthroughData } from "../workerPassthroughData.interface";
 
 
 export class FrameMapComponentWorker extends Rete.Component {
@@ -46,15 +47,15 @@ export class FrameMapComponentWorker extends Rete.Component {
         );
     }
 
-    async worker(node: NodeData, inputs: WorkerInputs, data: any) {
+    async worker(node: NodeData, inputs: WorkerInputs, data: WorkerPassthroughData) {
         if (data === null) {
             this.closed = ['frameArrOut'];              // stop propagating event
             this.component.initBackend(node, inputs);   // worker is run outside of current class context, so we need to acess initBackend via .component
         }
         else if (this.component.instMgr.getInstance(node)?.instance) {
             this.closed = [];                           // enable propagating event again
-            data.fromId = node.id;
-            data.frameArr = await this.component.instMgr.getInstance(node).instance.convert(data.frameArr);
+            const upstreamNodeId = node.inputs.frameArrIn.connections[0]?.node;   // inputs.<key> must match input key in builder definition (see above)
+            data[node.id] = {frameArr: await this.component.instMgr.getInstance(node).instance.convert(data[upstreamNodeId].frameArr)};
         }
         else {
             this.closed = ['frameArrOut'];              // stop propagating event
