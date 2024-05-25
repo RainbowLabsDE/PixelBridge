@@ -68,8 +68,14 @@ export class PreviewOutputComponentWorker extends Rete.Component {
                     buffer: Buffer.alloc(aggregatedBufSize)
                 }
                 frameArr.frames.forEach((frame, i) => {
-                    let offset = frame.buffer.length * i;
-                    frame.buffer.copy(mergedFrame.buffer, offset);
+                    for (let line = 0; line < frame.height; line++) {
+                        const moduleColumn = Math.floor(i % frameArr.width);
+                        const moduleRow = Math.floor(i / frameArr.width);
+                        const modulePixelOffset = (moduleRow * mergedFrame.width * frame.height + moduleColumn * frame.width) * 3;
+                        const targetOffset = modulePixelOffset + line * mergedFrame.width * 3;
+                        const srcOffset = line * frame.width * 3;
+                        frame.buffer.copy(mergedFrame.buffer, targetOffset, srcOffset, srcOffset + frame.width * 3);
+                    }
                 });
                 outFrame = mergedFrame;
             }
